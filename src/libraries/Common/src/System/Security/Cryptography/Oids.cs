@@ -28,7 +28,8 @@ namespace System.Security.Cryptography
         internal const string EcDiffieHellman = "1.3.132.1.12";
         internal const string DiffieHellman = "1.2.840.10046.2.1";
         internal const string DiffieHellmanPkcs3 = "1.2.840.113549.1.3.1";
-
+        internal const string Ed25519 = "1.3.101.112";
+        internal const string Ed448 = "1.3.101.112";
         // Cryptographic Attribute Types
         internal const string SigningTime = "1.2.840.113549.1.9.5";
         internal const string ContentType = "1.2.840.113549.1.9.3";

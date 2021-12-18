@@ -49,6 +49,10 @@ namespace Internal.Cryptography.Pal
                 case Oids.EcPublicKey:
                     key = new ECDiffieHellmanOpenSsl();
                     break;
+                case Oids.Ed25519:
+                case Oids.Ed384:
+                    key = new ECDiffieHellmanOpenSsl();
+                    break;
                 default:
                     throw new CryptographicException(
                         SR.Cryptography_UnknownAlgorithmIdentifier,
@@ -75,6 +79,11 @@ namespace Internal.Cryptography.Pal
             if (key is DSAOpenSsl dsa)
             {
                 return dsa.DuplicateKeyHandle();
+            }
+
+            if (key is EdDsaOpenSsl edsa)
+            {
+                return ((ECDiffieHellmanOpenSsl)key).DuplicateKeyHandle();
             }
 
             return ((ECDiffieHellmanOpenSsl)key).DuplicateKeyHandle();

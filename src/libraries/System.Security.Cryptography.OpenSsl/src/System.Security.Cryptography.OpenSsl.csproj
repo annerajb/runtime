@@ -23,6 +23,7 @@
     <Compile Include="System\Security\Cryptography\DSAOpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\ECDiffieHellmanOpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\ECDsaOpenSsl.cs" />
+    <Compile Include="System\Security\Cryptography\EdDsaOpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\RSAOpenSsl.cs" />
     <Compile Include="$(CommonPath)Internal\Cryptography\AsymmetricAlgorithmHelpers.Der.cs"
              Link="Common\Internal\Cryptography\AsymmetricAlgorithmHelpers.Der.cs" />
@@ -96,6 +97,8 @@
              Link="Common\System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDsaOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECDsaOpenSsl.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\EdDsaOpenSsl.cs"
+             Link="Common\System\Security\Cryptography\EdDsaOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.ImportExport.cs"

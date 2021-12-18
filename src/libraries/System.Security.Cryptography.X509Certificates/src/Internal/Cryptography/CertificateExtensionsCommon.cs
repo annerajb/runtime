@@ -54,6 +54,9 @@ namespace Internal.Cryptography.Pal
             if (typeof(T) == typeof(ECDsa))
                 return (T?)(object?)certificate.Pal.GetECDsaPrivateKey();
 
+            if (typeof(T) == typeof(EdDsa))
+                return (T?)(object?)certificate.Pal.GetEdDsaPrivateKey();
+
             if (typeof(T) == typeof(DSA))
                 return (T?)(object?)certificate.Pal.GetDSAPrivateKey();
 

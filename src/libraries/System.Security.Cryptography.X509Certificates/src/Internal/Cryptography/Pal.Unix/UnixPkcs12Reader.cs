@@ -598,10 +598,21 @@ namespace Internal.Cryptography.Pal
                         default:
                             return false;
                     }
-
                     return
                         publicKeyInfo.Algorithm.Parameters.HasValue &&
                         publicKeyInfo.Algorithm.Parameters.Value.Span.SequenceEqual(keyParams);
+                case Oids.Ed25519:
+                    switch (publicKeyInfo.Algorithm.Algorithm)
+                    {
+                        case Oids.Ed25519:
+                            break;
+                        default:
+                            return false;
+                    }
+                    return
+                        publicKeyInfo.Algorithm.Parameters.HasValue &&
+                        publicKeyInfo.Algorithm.Parameters.Value.Span.SequenceEqual(keyParams);
+
             }
 
             if (algorithm != publicKeyInfo.Algorithm.Algorithm)

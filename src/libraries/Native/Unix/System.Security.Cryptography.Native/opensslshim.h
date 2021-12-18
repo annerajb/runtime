@@ -372,6 +372,10 @@ void SSL_get0_alpn_selected(const SSL* ssl, const unsigned char** protocol, unsi
     REQUIRED_FUNCTION(EVP_PKEY_get1_EC_KEY) \
     REQUIRED_FUNCTION(EVP_PKEY_get1_RSA) \
     REQUIRED_FUNCTION(EVP_PKEY_new) \
+    NEW_REQUIRED_FUNCTION(EVP_PKEY_new_raw_private_key) \
+    NEW_REQUIRED_FUNCTION(EVP_PKEY_new_raw_public_key) \
+    NEW_REQUIRED_FUNCTION(EVP_PKEY_get_raw_private_key) \
+    NEW_REQUIRED_FUNCTION(EVP_PKEY_get_raw_public_key) \
     REQUIRED_FUNCTION(EVP_PKEY_set1_DSA) \
     REQUIRED_FUNCTION(EVP_PKEY_set1_EC_KEY) \
     REQUIRED_FUNCTION(EVP_PKEY_set1_RSA) \
@@ -786,6 +790,10 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define EVP_PKEY_get1_EC_KEY EVP_PKEY_get1_EC_KEY_ptr
 #define EVP_PKEY_get1_RSA EVP_PKEY_get1_RSA_ptr
 #define EVP_PKEY_new EVP_PKEY_new_ptr
+#define EVP_PKEY_new_raw_private_key EVP_PKEY_new_raw_private_key_ptr
+#define EVP_PKEY_new_raw_public_key EVP_PKEY_new_raw_public_key_ptr
+#define EVP_PKEY_get_raw_private_key EVP_PKEY_get_raw_private_key_ptr
+#define EVP_PKEY_get_raw_public_key EVP_PKEY_get_raw_public_key_ptr
 #define EVP_PKEY_set1_DSA EVP_PKEY_set1_DSA_ptr
 #define EVP_PKEY_set1_EC_KEY EVP_PKEY_set1_EC_KEY_ptr
 #define EVP_PKEY_set1_RSA EVP_PKEY_set1_RSA_ptr

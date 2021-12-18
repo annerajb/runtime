@@ -42,6 +42,23 @@ namespace System.Security.Cryptography
         public override byte[] SignHash(byte[] hash) { throw null; }
         public override bool VerifyHash(byte[] hash, byte[] signature) { throw null; }
     }
+    public sealed partial class EdDsaOpenSsl : System.Security.Cryptography.EdDsa
+    {
+        public EdDsaOpenSsl() { }
+        //public EdDsaOpenSsl(int keySize) { }
+        public EdDsaOpenSsl(System.IntPtr handle) { }
+        public EdDsaOpenSsl(System.Security.Cryptography.SafeEvpPKeyHandle pkeyHandle) { }
+        public override int KeySize { get { throw null; } set { } }
+        public override System.Security.Cryptography.KeySizes[] LegalKeySizes { get { throw null; } }
+        protected override void Dispose(bool disposing) { }
+        public System.Security.Cryptography.SafeEvpPKeyHandle DuplicateKeyHandle() { throw null; }
+        public override void GenerateKey(System.Security.Cryptography.ECCurve curve) { }
+        protected override byte[] HashData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
+        protected override byte[] HashData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
+        public override void ImportParameters(System.Security.Cryptography.ECParameters parameters) { }
+        //public override byte[] SignHash(byte[] hash) { throw null; }
+        //public override bool VerifyHash(byte[] hash, byte[] signature) { throw null; }
+    }
     public sealed partial class RSAOpenSsl : System.Security.Cryptography.RSA
     {
         public RSAOpenSsl() { }

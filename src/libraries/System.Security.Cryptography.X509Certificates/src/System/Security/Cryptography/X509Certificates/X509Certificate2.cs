@@ -27,6 +27,7 @@ namespace System.Security.Cryptography.X509Certificates
         private static readonly string[] s_EcPublicKeyPrivateKeyLabels = { PemLabels.EcPrivateKey, PemLabels.Pkcs8PrivateKey };
         private static readonly string[] s_RsaPublicKeyPrivateKeyLabels = { PemLabels.RsaPrivateKey, PemLabels.Pkcs8PrivateKey };
         private static readonly string[] s_DsaPublicKeyPrivateKeyLabels = { PemLabels.Pkcs8PrivateKey };
+        private static readonly string[] s_EdDsaPublicKeyPrivateKeyLabels = { PemLabels.Pkcs8PrivateKey };
 
         public override void Reset()
         {
@@ -868,6 +869,7 @@ namespace System.Security.Cryptography.X509Certificates
                     Oids.Rsa => ExtractKeyFromPem<RSA>(keyPem, s_RsaPublicKeyPrivateKeyLabels, RSA.Create, certificate.CopyWithPrivateKey),
                     Oids.Dsa => ExtractKeyFromPem<DSA>(keyPem, s_DsaPublicKeyPrivateKeyLabels, DSA.Create, certificate.CopyWithPrivateKey),
                     Oids.EcPublicKey => ExtractKeyFromPem<ECDsa>(keyPem, s_EcPublicKeyPrivateKeyLabels, ECDsa.Create, certificate.CopyWithPrivateKey),
+                    Oids.Ed25519 => ExtractKeyFromPem<EdDsa>(keyPem, s_EdDsaPublicKeyPrivateKeyLabels, EdDsa.Create, certificate.CopyWithPrivateKey),
                     _ => throw new CryptographicException(SR.Format(SR.Cryptography_UnknownKeyAlgorithm, keyAlgorithm)),
                 };
             }

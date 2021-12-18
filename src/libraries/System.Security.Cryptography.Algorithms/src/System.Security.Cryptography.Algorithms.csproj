@@ -49,6 +49,7 @@
     <Compile Include="System\Security\Cryptography\ECDiffieHellmanPublicKey.ExportParameters.cs" />
     <Compile Include="System\Security\Cryptography\ECDsa.cs" />
     <Compile Include="System\Security\Cryptography\ECDsa.Xml.cs" />
+    <Compile Include="System\Security\Cryptography\EdDsa.cs" />
     <Compile Include="System\Security\Cryptography\ECParameters.cs" />
     <Compile Include="System\Security\Cryptography\ECPoint.cs" />
     <Compile Include="System\Security\Cryptography\HKDF.cs" />
@@ -479,6 +480,8 @@
              Link="Common\System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDsaOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECDsaOpenSsl.cs" />
+     <Compile Include="$(CommonPath)System\Security\Cryptography\EdDsaOpenSsl.cs"
+             Link="Common\System\Security\Cryptography\EdDsaOpenSsl.cs" />         
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.ImportExport.cs"

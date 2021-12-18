@@ -65,7 +65,16 @@ namespace System.Security.Cryptography.X509Certificates.Tests
                 Assert.Equal(1, publicKey[pklen - 1]);
             }
         }
-
+        [Fact]
+        public static void X509Certificate2_25519_ToStringVerbose_NoPrivateKey()
+        {
+            using (var cert = new X509Certificate2(TestData.Anner25519CertPemBytes))
+            {
+                string certToString = cert.ToString(true);
+                Assert.DoesNotContain(PrivateKeySectionHeader, certToString);
+                Assert.Contains(PublicKeySectionHeader, certToString);
+            }
+        }
         [Fact]
         public static void X509Cert2Test()
         {
