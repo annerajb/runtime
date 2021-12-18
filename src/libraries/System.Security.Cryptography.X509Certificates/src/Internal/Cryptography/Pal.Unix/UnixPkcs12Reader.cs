@@ -598,6 +598,7 @@ namespace Internal.Cryptography.Pal
                         default:
                             return false;
                     }
+
                     return
                         publicKeyInfo.Algorithm.Parameters.HasValue &&
                         publicKeyInfo.Algorithm.Parameters.Value.Span.SequenceEqual(keyParams);
@@ -609,10 +610,10 @@ namespace Internal.Cryptography.Pal
                         default:
                             return false;
                     }
+
                     return
                         publicKeyInfo.Algorithm.Parameters.HasValue &&
                         publicKeyInfo.Algorithm.Parameters.Value.Span.SequenceEqual(keyParams);
-
             }
 
             if (algorithm != publicKeyInfo.Algorithm.Algorithm)
