@@ -241,7 +241,6 @@ namespace Internal.Cryptography.Pal
 
             if (!init)
             {
-                Console.WriteLine("fuckme");
                 throw Interop.Crypto.CreateOpenSslCryptographicException();
             }
 
