@@ -48,14 +48,13 @@ namespace Internal.Cryptography.Pal
             Debug.Assert(password != null);
 
             ICertificatePal? cert;
-            //Exception? openSslException;
-            var pem_read_result = TryReadX509Pem(rawData, out cert);
-            if (
-                pem_read_result ||
-                TryReadX509Der(rawData, out cert) ||
+            Exception? openSslException;
+
+            if (TryReadX509Der(rawData, out cert) ||
+                TryReadX509Pem(rawData, out cert) ||
                 PkcsFormatReader.TryReadPkcs7Der(rawData, out cert) ||
-                PkcsFormatReader.TryReadPkcs7Pem(rawData, out cert) //||
-                //PkcsFormatReader.TryReadPkcs12(rawData, password, out cert, out openSslException)
+                PkcsFormatReader.TryReadPkcs7Pem(rawData, out cert) ||
+                PkcsFormatReader.TryReadPkcs12(rawData, password, out cert, out openSslException)
                 )
             {
                 if (cert == null)
@@ -66,10 +65,10 @@ namespace Internal.Cryptography.Pal
 
                 return cert;
             }
-            throw new CryptographicException();
+
             // Unsupported
-            //Debug.Assert(openSslException != null);
-            //throw openSslException;
+            Debug.Assert(openSslException != null);
+            throw openSslException;
         }
 
         public static ICertificatePal FromFile(string fileName, SafePasswordHandle password, X509KeyStorageFlags keyStorageFlags)
