@@ -262,6 +262,8 @@
     <Compile Include="System\Security\Cryptography\ECDsa.Xml.cs" />
     <Compile Include="System\Security\Cryptography\ECParameters.cs" />
     <Compile Include="System\Security\Cryptography\ECPoint.cs" />
+    <Compile Include="System\Security\Cryptography\EDDSA.cs" />
+    <Compile Include="System\Security\Cryptography\EDDSA.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithm.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithmName.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithmNames.cs" />
