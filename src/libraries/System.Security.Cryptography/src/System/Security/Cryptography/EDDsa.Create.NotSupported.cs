@@ -5,9 +5,9 @@ using System.Runtime.Versioning;
 
 namespace System.Security.Cryptography
 {
-    public partial class EDDSA : AsymmetricAlgorithm
+    public partial class EDDsa : AsymmetricAlgorithm
     {
-        public static new partial EDDSA Create()
+        public static new partial EDDsa Create()
         {
             throw new PlatformNotSupportedException();
         }

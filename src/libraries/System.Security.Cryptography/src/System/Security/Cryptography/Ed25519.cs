@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Security.Cryptography
 {
-    public partial class EDDSAAlgorithm : AsymmetricAlgorithm
+    public partial class Ed25519 : AsymmetricAlgorithm
     {
     }
 }

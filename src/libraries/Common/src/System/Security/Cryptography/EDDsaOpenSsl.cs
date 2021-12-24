@@ -9,36 +9,24 @@ using Microsoft.Win32.SafeHandles;
 namespace System.Security.Cryptography
 {
 #if INTERNAL_ASYMMETRIC_IMPLEMENTATIONS
-    internal static partial class EdDsaImplementation
+    internal static partial class EDDsaImplementation
     {
 #endif
-        public sealed partial class EDDSAOpenSsl : EDDSA
+        public sealed partial class EDDsaOpenSsl : EDDsa
         {
             // Ed448 maxes out at 114 bytes, so 114  should always be enough
             private const int SignatureStackBufSize = 114;
 
             private Lazy<SafeEvpPKeyHandle> _key;
 
-        // <summary>
-        // Create an ECDsaOpenSsl algorithm with a named curve.
-        // </summary>
-        // <param name="curve">The <see cref="ECCurve"/> representing the curve.</param>
-        // <exception cref="ArgumentNullException">if <paramref name="curve" /> is null.</exception>
-        //public EDDSAOpenSsl(ECCurve curve)
-        //{
-        //    ThrowIfNotSupported();
-        //    _key = new SafeEvpPKeyHandle(curve);
-        //    ForceSetKeySize(_key.KeySize);
-        //}
-
         /// <summary>
-        ///     Create an ECDsaOpenSsl algorithm with a random 128 bit key pair.
+        ///     Create an EDDsaOpenSsl algorithm with a random 128 bit key pair.
         /// </summary>
-        public EDDSAOpenSsl() : this(128)
+        public EDDsaOpenSsl() : this(128)
         {
         }
 
-        public EDDSAOpenSsl(int keySize)
+        public EDDsaOpenSsl(int keySize)
         {
             ThrowIfNotSupported();
             base.KeySize = keySize;
@@ -135,7 +123,7 @@ namespace System.Security.Cryptography
                     destination = new byte[signatureLength];
                 }
                 //todo: move this outside eddsaopenssl.cs since it's generic for openssl digests as evp_pkeys
-                int actualLength = Interop.Crypto.EvpDigestSign(key, hash, destination);
+                int actualLength = 10;//Interop.Crypto.EvpDigestSign(key, hash, destination);
                 if (actualLength < 0)
                 {
                     throw Interop.Crypto.CreateOpenSslCryptographicException();
@@ -187,7 +175,7 @@ namespace System.Security.Cryptography
                 toVerify = derSignature.Slice(0, expectedBytes);
 
                 SafeEvpPKeyHandle key = _key.Value;
-                return Interop.Crypto.EvpDigestVerify(key, hash, toVerify);
+                return false;//;Interop.Crypto.EvpDigestVerify(key, hash, toVerify);
             }
 
             //protected override byte[] HashData(byte[] data, int offset, int count, HashAlgorithmName hashAlgorithm) =>
@@ -250,7 +238,7 @@ namespace System.Security.Cryptography
 
         private SafeEvpPKeyHandle GenerateKey()
         {
-            return Interop.Crypto.EdDsaGenerateKey();
+            return new SafeEvpPKeyHandle();//Interop.Crypto.EdDsaGenerateKey();
         }
 
         //public override void ImportParameters(ECParameters parameters)
@@ -296,9 +284,9 @@ namespace System.Security.Cryptography
                 {
                     throw new ObjectDisposedException(
 #if INTERNAL_ASYMMETRIC_IMPLEMENTATIONS
-                        nameof(EDDSA)
+                        nameof(EDDsa)
 #else
-                        nameof(EDDSAOpenSsl)
+                        nameof(EDDsaOpenSsl)
 #endif
                     );
                 }

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Internal.Cryptography;
@@ -6,12 +6,11 @@ using System.Runtime.Versioning;
 
 namespace System.Security.Cryptography
 {
-    public abstract partial class EDDSA : AsymmetricAlgorithm
+    public abstract partial class EDDsa : AsymmetricAlgorithm
     {
-        protected EDDSA() { }
-
-        public static new partial EDDSA Create();
-
+        protected EDDsa() { }
+        public static new partial EDDsa Create();
+/*
         //protected  byte[] HashData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) => throw DerivedClassMustOverride();
         //protected  byte[] HashData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) => throw DerivedClassMustOverride();
         /// <summary>
@@ -25,9 +24,9 @@ namespace System.Security.Cryptography
         {
             throw new NotSupportedException(SR.NotSupported_SubclassOverride);
         }
+        */
         public abstract bool VerifyHash(byte[] hash, byte[] signature);
         public virtual bool VerifyHash(ReadOnlySpan<byte> hash, ReadOnlySpan<byte> signature) => VerifyHashCore(hash, signature);
-
         public virtual bool TrySignHash(ReadOnlySpan<byte> hash, Span<byte> destination, out int bytesWritten)
             => TrySignHashCore(hash, destination, out bytesWritten);
         /// <summary>
@@ -58,6 +57,7 @@ namespace System.Security.Cryptography
             byte[] result = SignHash(hash.ToArray());
             return Helpers.TryCopyToDestination(result, destination, out bytesWritten);
         }
+
         /// <summary>
         ///   Verifies that a digital signature is valid for the provided hash.
         /// </summary>
@@ -77,6 +77,7 @@ namespace System.Security.Cryptography
             return VerifyHash(hash.ToArray(), signature.ToArray());
         }
         public abstract byte[] SignHash(byte[] hash);
+        /*
         /// <summary>
         /// When overridden in a derived class, exports the named or explicit for an ECCurve.
         /// If the curve has a name, the Curve property will contain named curve parameters otherwise it will contain explicit parameters.
@@ -91,6 +92,6 @@ namespace System.Security.Cryptography
         public virtual byte[] ExportParameters(bool includePrivateParameters)
         {
             throw new NotSupportedException(SR.NotSupported_SubclassOverride);
-        }
+        }*/
     }
 }

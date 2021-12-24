@@ -271,6 +271,7 @@ namespace System.Security.Cryptography
             AddEntry("1.2.840.10045.3.1.4", "x962P239v1");
             AddEntry("1.2.840.10045.3.1.5", "x962P239v2");
             AddEntry("1.2.840.10045.3.1.6", "x962P239v3");
+            AddEntry("1.3.101.112", "Ed25519");
         }
 
         static partial void ExtraStaticDebugValidation();

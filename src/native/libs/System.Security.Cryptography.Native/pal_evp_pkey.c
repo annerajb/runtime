@@ -3,6 +3,9 @@
 
 #include <assert.h>
 #include "pal_evp_pkey.h"
+#include "pal_utilities.h"
+
+#define SUCCESS 1
 
 EVP_PKEY* CryptoNative_EvpPkeyCreate()
 {
@@ -198,4 +201,40 @@ int32_t CryptoNative_EncodeSubjectPublicKeyInfo(EVP_PKEY* pkey, uint8_t* buf)
     assert(buf != NULL);
 
     return i2d_PUBKEY(pkey, &buf);
+}
+
+EVP_PKEY* CryptoNative_EvpPKeyCreateRawPrivateKey(int32_t algId,const uint8_t* buf, int32_t len)
+{
+    return EVP_PKEY_new_raw_private_key(algId, NULL,buf, Int32ToSizeT(len));
+}
+
+EVP_PKEY* CryptoNative_EvpPKeyCreateRawPublicKey(int32_t algId,const uint8_t* buf, int32_t len)
+{
+    return EVP_PKEY_new_raw_public_key(algId, NULL, buf, Int32ToSizeT(len));
+}
+
+int32_t CryptoNative_EvpPKeyGetRawPrivateKey(const EVP_PKEY* pkey, uint8_t* buf, int32_t len)
+{
+    assert(pkey != NULL);
+
+    int ret = 0;
+    size_t written = Int32ToSizeT(len);
+    if(EVP_PKEY_get_raw_private_key(pkey, buf, &written) == SUCCESS)
+    {
+        ret = SizeTToInt32(written);
+    }
+    return ret;
+}
+
+int32_t CryptoNative_EvpPKeyGetRawPublicKey(const EVP_PKEY* pkey, uint8_t* pub, int32_t len)
+{
+    assert(pkey != NULL);
+
+    int ret = 0;
+    size_t written = Int32ToSizeT(len);
+    if(EVP_PKEY_get_raw_public_key(pkey, pub, &written) == SUCCESS)
+    {
+        ret = SizeTToInt32(written);
+    }
+    return ret;
 }

@@ -7,24 +7,24 @@ using Microsoft.Win32.SafeHandles;
 
 namespace System.Security.Cryptography
 {
-    public sealed partial class EDDSAOpenSsl : EDDSA
+    public sealed partial class EDDsaOpenSsl : EDDsa
     {
         /// <summary>
-        /// Create an EDDSAOpenSsl from an <see cref="SafeEvpPKeyHandle"/> whose value is an existing
+        /// Create an EDDsaOpenSsl from an <see cref="SafeEvpPKeyHandle"/> whose value is an existing
         /// OpenSSL <c>EVP_PKEY*</c>
         /// </summary>
         /// <param name="pkeyHandle">A SafeHandle for an OpenSSL <c>EVP_PKEY*</c></param>
         /// <exception cref="ArgumentNullException"><paramref name="pkeyHandle"/> is <c>null</c></exception>
         /// <exception cref="ArgumentException"><paramref name="pkeyHandle"/> <see cref="SafeHandle.IsInvalid" /></exception>
         /// <exception cref="CryptographicException"><paramref name="pkeyHandle"/> is not a valid enveloped <c>EC_KEY*</c></exception>
-        public EDDSAOpenSsl(SafeEvpPKeyHandle pkeyHandle)
+        public EDDsaOpenSsl(SafeEvpPKeyHandle pkeyHandle)
         {
             if (pkeyHandle == null)
                 throw new ArgumentNullException(nameof(pkeyHandle));
             if (pkeyHandle.IsInvalid)
                 throw new ArgumentException(SR.Cryptography_OpenInvalidHandle, nameof(pkeyHandle));
 
-            ThrowIfNotSupported();
+            //ThrowIfNotSupported();
             SafeEvpPKeyHandle newKey = Interop.Crypto.EvpPKeyDuplicate(
                  pkeyHandle,
                  Interop.Crypto.EvpAlgorithmId.Ed25519);
@@ -33,7 +33,7 @@ namespace System.Security.Cryptography
         }
 
         /// <summary>
-        /// Create an EDDSAOpenSsl from an existing <see cref="IntPtr"/> whose value is an
+        /// Create an EDDsaOpenSsl from an existing <see cref="IntPtr"/> whose value is an
         /// existing OpenSSL <c>EC_KEY*</c>.
         /// </summary>
         /// <remarks>
@@ -42,13 +42,13 @@ namespace System.Security.Cryptography
         /// </remarks>
         /// <param name="handle">A pointer to an OpenSSL <c>EC_KEY*</c></param>
         /// <exception cref="ArgumentException"><paramref name="handle" /> is invalid</exception>
-        public EDDSAOpenSsl(IntPtr handle)
+        public EDDsaOpenSsl(IntPtr handle)
         {
             if (handle == IntPtr.Zero)
                 throw new ArgumentException(SR.Cryptography_OpenInvalidHandle, nameof(handle));
 
-            ThrowIfNotSupported();
-            SafeEvpPKeyHandle pkey        = Interop.Crypto.EvpPKeyCreateEdDsa(handle);
+            //ThrowIfNotSupported();
+            SafeEvpPKeyHandle pkey = new SafeEvpPKeyHandle();//Interop.Crypto.EvpPKeyCreateEdDsa(handle);
             Debug.Assert(!pkey.IsInvalid);
 
             SetKey(pkey);
@@ -83,12 +83,12 @@ namespace System.Security.Cryptography
             }
         }
 
-        static partial void ThrowIfNotSupported()
-        {
-            if (!Interop.OpenSslNoInit.OpenSslIsAvailable)
-            {
-                throw new PlatformNotSupportedException(SR.Format(SR.Cryptography_AlgorithmNotSupported, nameof(EDDSAOpenSsl)));
-            }
-        }
+        // static partial void ThrowIfNotSupported()
+        // {
+        //     if (!Interop.OpenSslNoInit.OpenSslIsAvailable)
+        //     {
+        //         throw new PlatformNotSupportedException(SR.Format(SR.Cryptography_AlgorithmNotSupported, nameof(EDDsaOpenSsl)));
+        //     }
+        // }
     }
 }
