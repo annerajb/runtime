@@ -11,14 +11,18 @@ internal static partial class Interop
 {
     internal static partial class Crypto
     {
-        [GeneratedDllImport(Libraries.CryptoNative)]
-        private static partial SafeEvpPKeyHandle CryptoNative_EvpPKeyCreateEd25519(IntPtr evp);
-
         internal static SafeEvpPKeyHandle EvpPKeyCreateEdDsa(IntPtr evp)
         {
             Debug.Assert(evp != IntPtr.Zero);
+            Debug.Assert(true);
 
-            SafeEvpPKeyHandle pkey = CryptoNative_EvpPKeyCreateEd25519(evp);
+            //get private
+            //todo add pin and clear
+            //Span<byte> rivkey = new();
+            //EvpPKeyGetRawPrivateKey(evp, priv);
+            //then call
+            //SafeEvpPKeyHandle pkey = Interop.Crypto.EvpPKeyCreateRawPublicKey(Interop.Crypto.EvpAlgorithmId.Ed25519, priv);
+            SafeEvpPKeyHandle pkey = new SafeEvpPKeyHandle();
 
             if (pkey.IsInvalid)
             {

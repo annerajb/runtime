@@ -187,6 +187,8 @@
              Link="Common\System\Security\Cryptography\DSAKeyFormatHelper.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\EccKeyFormatHelper.cs"
              Link="Common\System\Security\Cryptography\EccKeyFormatHelper.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\EDDsaKeyFormatHelper.cs"
+             Link="Common\System\Security\Cryptography\EDDsaKeyFormatHelper.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\KeyBlobHelpers.cs"
              Link="Common\System\Security\Cryptography\KeyBlobHelpers.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\HashOneShotHelpers.cs"
@@ -263,7 +265,6 @@
     <Compile Include="System\Security\Cryptography\ECParameters.cs" />
     <Compile Include="System\Security\Cryptography\ECPoint.cs" />
     <Compile Include="System\Security\Cryptography\EDDsa.cs" />
-    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithm.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithmName.cs" />
     <Compile Include="System\Security\Cryptography\HashAlgorithmNames.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="System\Security\Cryptography\RSAOAEPKeyExchangeDeformatter.cs" />
     <Compile Include="System\Security\Cryptography\RSAOAEPKeyExchangeFormatter.cs" />
     <Compile Include="System\Security\Cryptography\RSAParameters.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsaParameters.cs" />
     <Compile Include="System\Security\Cryptography\RSAPKCS1KeyExchangeDeformatter.cs" />
     <Compile Include="System\Security\Cryptography\RSAPKCS1KeyExchangeFormatter.cs" />
     <Compile Include="System\Security\Cryptography\RSAPKCS1SignatureDeformatter.cs" />
@@ -378,6 +380,7 @@
     <Compile Include="System\Security\Cryptography\RandomNumberGeneratorImplementation.Browser.cs" />
     <Compile Include="System\Security\Cryptography\RC2Implementation.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\RSA.Create.NotSupported.cs" />
+    <!-- <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" /> -->
     <Compile Include="System\Security\Cryptography\SHAHashProvider.Browser.cs" />
     <Compile Include="System\Security\Cryptography\TripleDesImplementation.NotSupported.cs" />
   </ItemGroup>
@@ -463,6 +466,8 @@
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs"
              Link="Common\System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDsaOpenSsl.cs"
+             Link="Common\System\Security\Cryptography\EDDsaOpenSsl.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\EDDsaOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECDsaOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECOpenSsl.cs" />
@@ -475,6 +480,7 @@
     <Compile Include="System\Security\Cryptography\DesImplementation.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\ECDsa.Create.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\ECDiffieHellman.Create.OpenSsl.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\HashProviderDispenser.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\OidLookup.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\OpenSslAsnFormatter.cs" />

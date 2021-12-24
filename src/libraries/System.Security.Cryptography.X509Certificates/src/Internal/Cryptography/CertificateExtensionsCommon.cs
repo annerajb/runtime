@@ -42,6 +42,9 @@ namespace Internal.Cryptography.Pal
             else if (typeof(T) == typeof(ECDiffieHellman))
             {
                 return (T)(object)(X509Pal.Instance.DecodeECDiffieHellmanPublicKey(certificate.Pal));
+            }else if (typeof(T) == typeof(EDDsa))
+            {
+                return (T)(object)(X509Pal.Instance.DecodeEDDsaPublicKey(certificate.Pal));
             }
 
             Debug.Fail("Expected GetExpectedOidValue() to have thrown before we got here.");
@@ -75,6 +78,9 @@ namespace Internal.Cryptography.Pal
             if (typeof(T) == typeof(ECDiffieHellman))
                 return (T?)(object?)certificate.Pal.GetECDiffieHellmanPrivateKey();
 
+            if (typeof(T) == typeof(EDDsa))
+                return (T?)(object?)certificate.Pal.GetEDDsaPrivateKey();
+
             Debug.Fail("Expected GetExpectedOidValue() to have thrown before we got here.");
             throw new NotSupportedException(SR.NotSupported_KeyAlgorithm);
         }
@@ -88,6 +94,8 @@ namespace Internal.Cryptography.Pal
                 return Oids.EcPublicKey;
             if (typeof(T) == typeof(DSA))
                 return Oids.Dsa;
+            if (typeof(T) == typeof(EDDsa))
+                return Oids.Ed25519;
             throw new NotSupportedException(SR.NotSupported_KeyAlgorithm);
         }
     }

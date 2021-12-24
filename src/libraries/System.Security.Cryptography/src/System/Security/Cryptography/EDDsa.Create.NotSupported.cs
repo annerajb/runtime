@@ -11,5 +11,10 @@ namespace System.Security.Cryptography
         {
             throw new PlatformNotSupportedException();
         }
+
+        public static partial EDDsa Create(EDDsaParameters parameters)
+        {
+            throw new PlatformNotSupportedException();
+        }
     }
 }

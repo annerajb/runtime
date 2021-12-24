@@ -135,6 +135,7 @@
     <Compile Include="System\Security\Cryptography\X509Certificates\CertificateRequest.cs" />
     <Compile Include="System\Security\Cryptography\X509Certificates\DSACertificateExtensions.cs" />
     <Compile Include="System\Security\Cryptography\X509Certificates\ECDsaCertificateExtensions.cs" />
+    <Compile Include="System\Security\Cryptography\X509Certificates\EDDsaCertificateExtensions.cs" />
     <Compile Include="System\Security\Cryptography\X509Certificates\ECDsaX509SignatureGenerator.cs" />
     <Compile Include="System\Security\Cryptography\X509Certificates\OpenFlags.cs" />
     <Compile Include="System\Security\Cryptography\X509Certificates\Pkcs10CertificationRequestInfo.cs" />
@@ -696,6 +697,8 @@
              Link="Common\System\Security\Cryptography\ECDiffieHellmanSecurityTransforms.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDiffieHellmanDerivation.cs"
              Link="Common\System\Security\Cryptography\ECDiffieHellmanDerivation.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\EDDsaKeyFormatHelper.cs"
+        Link="Common\System\Security\Cryptography\EDDsaKeyFormatHelper.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\RSAKeyFormatHelper.cs"
              Link="Common\System\Security\Cryptography\RSAKeyFormatHelper.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\RSAKeyFormatHelper.Encrypted.cs"

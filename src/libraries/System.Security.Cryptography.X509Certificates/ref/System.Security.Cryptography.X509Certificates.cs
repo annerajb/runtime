@@ -48,6 +48,12 @@ namespace System.Security.Cryptography.X509Certificates
         public static System.Security.Cryptography.ECDsa? GetECDsaPrivateKey(this System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) { throw null; }
         public static System.Security.Cryptography.ECDsa? GetECDsaPublicKey(this System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) { throw null; }
     }
+    public static partial class EDDsaCertificateExtensions
+    {
+        public static System.Security.Cryptography.X509Certificates.X509Certificate2 CopyWithPrivateKey(this System.Security.Cryptography.X509Certificates.X509Certificate2 certificate, System.Security.Cryptography.EDDsa privateKey) { throw null; }
+        public static System.Security.Cryptography.EDDsa? GetEDDsaPrivateKey(this System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) { throw null; }
+        public static System.Security.Cryptography.EDDsa? GetEDDsaPublicKey(this System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) { throw null; }
+    }
     [System.FlagsAttribute]
     public enum OpenFlags
     {
@@ -73,6 +79,7 @@ namespace System.Security.Cryptography.X509Certificates
         public System.Security.Cryptography.DSA? GetDSAPublicKey() { throw null; }
         public System.Security.Cryptography.ECDiffieHellman? GetECDiffieHellmanPublicKey() { throw null; }
         public System.Security.Cryptography.ECDsa? GetECDsaPublicKey() { throw null; }
+        public System.Security.Cryptography.EDDsa? GetEDDsaPublicKey() { throw null; }
         public System.Security.Cryptography.RSA? GetRSAPublicKey() { throw null; }
         public bool TryExportSubjectPublicKeyInfo(System.Span<byte> destination, out int bytesWritten) { throw null; }
     }

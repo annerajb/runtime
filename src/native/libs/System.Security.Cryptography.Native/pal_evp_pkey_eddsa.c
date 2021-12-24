@@ -8,27 +8,6 @@
 //todo: this exist on pal_evp.c maybe remove from there or add to shared header or not use it?
 #define SUCCESS 1
 
-EVP_PKEY* CryptoNative_EvpPKeyCreateEd25519(EVP_PKEY* currentKey)
-{
-    assert(currentKey != NULL);
-    //TODO define, inquire from library by passing null priv_key buffer and reading return?
-    unsigned char privKey[32] = {0};//todo 57 for 448
-    size_t privKeyLen = 0;
-    int ret = EVP_PKEY_get_raw_private_key(currentKey,privKey,&privKeyLen);
-    if (ret != SUCCESS)
-    {
-        //passed in key does not have a private key
-        return NULL;
-    }
-
-    EVP_PKEY* pkey = EVP_PKEY_new_raw_private_key(EVP_PKEY_ED25519,NULL,privKey,privKeyLen);
-    if (pkey == NULL)
-    {
-        return NULL;
-    }
-
-    return pkey;
-}
 
 EVP_PKEY* CryptoNative_Ed25519GenerateKey()
 {

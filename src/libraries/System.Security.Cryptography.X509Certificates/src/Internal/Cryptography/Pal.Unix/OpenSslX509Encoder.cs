@@ -30,6 +30,13 @@ namespace Internal.Cryptography.Pal
             return ((OpenSslX509CertificateReader)certificatePal).GetECDiffieHellmanPublicKey();
         }
 
+        public EDDsa DecodeEDDsaPublicKey(ICertificatePal? certificatePal)
+        {
+            if (certificatePal is null)
+                throw new NotSupportedException(SR.NotSupported_KeyAlgorithm);
+
+            return ((OpenSslX509CertificateReader)certificatePal).GetEDDsaPublicKey();
+        }
 
         public AsymmetricAlgorithm DecodePublicKey(Oid oid, byte[] encodedKeyValue, byte[] encodedParameters, ICertificatePal? certificatePal)
         {
@@ -291,6 +298,30 @@ namespace Internal.Cryptography.Pal
             spki.Encode(writer);
 
             DSA dsa = new DSAOpenSsl();
+            try
+            {
+                dsa.ImportSubjectPublicKeyInfo(writer.Encode(), out _);
+                return dsa;
+            }
+            catch (Exception)
+            {
+                dsa.Dispose();
+                throw;
+            }
+        }
+
+        private static EDDsa BuildEDDsaPublicKey(byte[] encodedKeyValue)
+        {
+            SubjectPublicKeyInfoAsn spki = new SubjectPublicKeyInfoAsn
+            {
+                Algorithm = new AlgorithmIdentifierAsn { Algorithm = Oids.Ed25519},
+                SubjectPublicKey = encodedKeyValue,
+            };
+
+            AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
+            spki.Encode(writer);
+
+            EDDsa dsa = new EDDsaOpenSsl();
             try
             {
                 dsa.ImportSubjectPublicKeyInfo(writer.Encode(), out _);

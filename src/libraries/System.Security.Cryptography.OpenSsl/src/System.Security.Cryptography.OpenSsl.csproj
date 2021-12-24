@@ -94,6 +94,8 @@
              Link="Common\System\Security\Cryptography\ECOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.ImportExport.cs"
              Link="Common\System\Security\Cryptography\ECOpenSsl.ImportExport.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\EDDsaKeyFormatHelper.cs"
+        Link="Common\System\Security\Cryptography\EDDsaKeyFormatHelper.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\KeyBlobHelpers.cs"
              Link="Common\System\Security\Cryptography\KeyBlobHelpers.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\KeyFormatHelper.cs"

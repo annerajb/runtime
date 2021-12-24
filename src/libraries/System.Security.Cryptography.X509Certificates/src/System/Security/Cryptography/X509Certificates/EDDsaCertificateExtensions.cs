@@ -7,28 +7,28 @@ using Internal.Cryptography.Pal;
 namespace System.Security.Cryptography.X509Certificates
 {
     /// <summary>
-    /// Provides extension methods for retrieving <see cref="EDDSA" /> implementations for the
+    /// Provides extension methods for retrieving <see cref="EDDsa" /> implementations for the
     /// public and private keys of a <see cref="X509Certificate2" />.
     /// </summary>
-    public static class EDDSACertificateExtensions
+    public static class EDDsaCertificateExtensions
     {
         /// <summary>
-        /// Gets the <see cref="EDDSA" /> public key from the certificate or null if the certificate does not have an RSA public key.
+        /// Gets the <see cref="EDDsa" /> public key from the certificate or null if the certificate does not have an RSA public key.
         /// </summary>
-        public static EDDSA? GetEdDsaPublicKey(this X509Certificate2 certificate)
+        public static EDDsa? GetEDDsaPublicKey(this X509Certificate2 certificate)
         {
-            return certificate.GetPublicKey<EDDSA>();
+            return certificate.GetPublicKey<EDDsa>();
         }
 
         /// <summary>
-        /// Gets the <see cref="EDDSA" /> private key from the certificate or null if the certificate does not have an RSA private key.
+        /// Gets the <see cref="EDDsa" /> private key from the certificate or null if the certificate does not have an RSA private key.
         /// </summary>
-        public static EDDSA? GetEdDsaPrivateKey(this X509Certificate2 certificate)
+        public static EDDsa? GetEDDsaPrivateKey(this X509Certificate2 certificate)
         {
-            return certificate.GetPrivateKey<EDDSA>();
+            return certificate.GetPrivateKey<EDDsa>();
         }
 
-        public static X509Certificate2 CopyWithPrivateKey(this X509Certificate2 certificate, EDDSA privateKey)
+        public static X509Certificate2 CopyWithPrivateKey(this X509Certificate2 certificate, EDDsa privateKey)
         {
             if (certificate == null)
                 throw new ArgumentNullException(nameof(certificate));
@@ -38,15 +38,15 @@ namespace System.Security.Cryptography.X509Certificates
             if (certificate.HasPrivateKey)
                 throw new InvalidOperationException(SR.Cryptography_Cert_AlreadyHasPrivateKey);
 
-            using (EDDSA? publicKey = GetEdDsaPublicKey(certificate))
+            using (EDDsa? publicKey = GetEDDsaPublicKey(certificate))
             {
                 if (publicKey == null)
                     throw new ArgumentException(SR.Cryptography_PrivateKey_WrongAlgorithm);
 
-                byte[] currentParameters = publicKey.ExportPkcs8PrivateKey();
-                byte[] newParameters = privateKey.ExportPkcs8PrivateKey();
+                EDDsaParameters currentParameters = publicKey.ExportParameters(false);
+                EDDsaParameters newParameters = privateKey.ExportParameters(false);
 
-                if (!currentParameters.ContentsEqual(newParameters))
+                if (!currentParameters.Key.ContentsEqual(newParameters.Key))
                 {
                     throw new ArgumentException(SR.Cryptography_PrivateKey_DoesNotMatch, nameof(privateKey));
                 }

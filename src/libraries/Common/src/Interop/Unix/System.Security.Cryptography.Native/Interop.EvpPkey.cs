@@ -206,6 +206,66 @@ internal static partial class Interop
             }
         }
 
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial SafeEvpPKeyHandle CryptoNative_EvpPKeyCreateRawPrivateKey(EvpAlgorithmId algId, ref byte buf, int len);
+
+        internal static SafeEvpPKeyHandle EvpPKeyCreateRawPrivateKey(EvpAlgorithmId algId, ReadOnlySpan<byte> buf)
+        {
+            SafeEvpPKeyHandle pkey = CryptoNative_EvpPKeyCreateRawPrivateKey(algId, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (pkey.IsInvalid)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return pkey;
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial SafeEvpPKeyHandle CryptoNative_EvpPKeyCreateRawPublicKey(EvpAlgorithmId algId, ref byte buf, int len);
+
+        internal static SafeEvpPKeyHandle EvpPKeyCreateRawPublicKey(EvpAlgorithmId algId, ReadOnlySpan<byte> buf)
+        {
+            SafeEvpPKeyHandle pkey = CryptoNative_EvpPKeyCreateRawPublicKey(algId, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (pkey.IsInvalid)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return pkey;
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial int CryptoNative_EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey, ref byte destination, int destinationLength);
+
+        internal static int EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey, Span<byte> buf)
+        {
+            int written = CryptoNative_EvpPKeyGetRawPrivateKey(pkey, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (written < 0)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return written;
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial int CryptoNative_EvpPKeyGetRawPublicKey(SafeEvpPKeyHandle pkey, ref byte destination, int destinationLength);
+
+        internal static int EvpPKeyGetRawPublicKey(SafeEvpPKeyHandle pkey, Span<byte> buf)
+        {
+            int written = CryptoNative_EvpPKeyGetRawPublicKey(pkey, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (written < 0)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return written;
+        }
+
         internal enum EvpAlgorithmId
         {
             Unknown = 0,

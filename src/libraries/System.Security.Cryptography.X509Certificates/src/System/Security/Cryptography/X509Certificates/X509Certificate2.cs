@@ -28,6 +28,7 @@ namespace System.Security.Cryptography.X509Certificates
         private static readonly string[] s_EcPublicKeyPrivateKeyLabels = { PemLabels.EcPrivateKey, PemLabels.Pkcs8PrivateKey };
         private static readonly string[] s_RsaPublicKeyPrivateKeyLabels = { PemLabels.RsaPrivateKey, PemLabels.Pkcs8PrivateKey };
         private static readonly string[] s_DsaPublicKeyPrivateKeyLabels = { PemLabels.Pkcs8PrivateKey };
+        private static readonly string[] s_EDDsaPublicKeyPrivateKeyLabels = { PemLabels.Pkcs8PrivateKey };
 
         public override void Reset()
         {
@@ -965,11 +966,11 @@ namespace System.Security.Cryptography.X509Certificates
                             s_EcPublicKeyPrivateKeyLabels,
                             ECDsa.Create,
                             certificate.CopyWithPrivateKey),
-                    Oids.EcPublicKey when IsECDiffieHellman(certificate) =>
-                        ExtractKeyFromPem<ECDiffieHellman>(
+                    Oids.Ed25519 when IsEDDsa(certificate) =>
+                        ExtractKeyFromPem<EDDsa>(
                             keyPem,
-                            s_EcPublicKeyPrivateKeyLabels,
-                            ECDiffieHellman.Create,
+                            s_EDDsaPublicKeyPrivateKeyLabels,
+                            EDDsa.Create,
                             certificate.CopyWithPrivateKey),
                     _ => throw new CryptographicException(SR.Format(SR.Cryptography_UnknownKeyAlgorithm, keyAlgorithm)),
                 };
@@ -1041,6 +1042,12 @@ namespace System.Security.Cryptography.X509Certificates
                             password,
                             ECDiffieHellman.Create,
                             certificate.CopyWithPrivateKey),
+                    Oids.Ed25519 when IsEDDsa(certificate) =>
+                        ExtractKeyFromEncryptedPem<EDDsa>(
+                            keyPem,
+                            password,
+                            EDDsa.Create,
+                            certificate.CopyWithPrivateKey),
                     _ => throw new CryptographicException(SR.Format(SR.Cryptography_UnknownKeyAlgorithm, keyAlgorithm)),
                 };
             }
@@ -1059,6 +1066,14 @@ namespace System.Security.Cryptography.X509Certificates
             using (ECDiffieHellman? ecdh = certificate.GetECDiffieHellmanPublicKey())
             {
                 return ecdh is not null;
+            }
+        }
+
+        private static bool IsEDDsa(X509Certificate2 certificate)
+        {
+            using (EDDsa? eddsa = certificate.GetEDDsaPublicKey())
+            {
+                return eddsa is not null;
             }
         }
 

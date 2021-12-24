@@ -97,7 +97,7 @@ namespace System.Security.Cryptography
         }
 
         /// <summary>Expected size of <see cref="s_friendlyNameToOid"/>.</summary>
-        private const int FriendlyNameToOidCount = 111;
+        private const int FriendlyNameToOidCount = 112;
 
         /// <summary>Expected size of <see cref="s_oidToFriendlyName"/>.</summary>
         private const int OidToFriendlyNameCount = 103;

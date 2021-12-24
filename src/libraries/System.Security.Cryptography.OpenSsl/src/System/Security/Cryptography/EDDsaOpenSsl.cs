@@ -9,6 +9,14 @@ namespace System.Security.Cryptography
 {
     public sealed partial class EDDsaOpenSsl : EDDsa
     {
+        public EDDsaOpenSsl(EDDsaParameters parameters)
+        {
+            ThrowIfNotSupported();
+
+            // Make _key be non-null before calling ImportParameters
+            _key = new Lazy<SafeEvpPKeyHandle>();
+            ImportParameters(parameters);
+        }
         /// <summary>
         /// Create an EDDsaOpenSsl from an <see cref="SafeEvpPKeyHandle"/> whose value is an existing
         /// OpenSSL <c>EVP_PKEY*</c>

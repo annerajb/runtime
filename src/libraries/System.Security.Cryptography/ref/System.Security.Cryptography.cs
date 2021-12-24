@@ -1121,6 +1121,10 @@ namespace System.Security.Cryptography
         public byte[]? P;
         public byte[]? Q;
     }
+    public partial struct EDDsaParameters
+    {
+        public byte[]? Key;
+    }
     public partial class RSAPKCS1KeyExchangeDeformatter : System.Security.Cryptography.AsymmetricKeyExchangeDeformatter
     {
         public RSAPKCS1KeyExchangeDeformatter() { }
@@ -1381,11 +1385,13 @@ namespace System.Security.Cryptography
     public abstract partial class EDDsa : System.Security.Cryptography.AsymmetricAlgorithm
     {
         protected EDDsa() { }
+        public override string? KeyExchangeAlgorithm { get { throw null; } }
         public override string SignatureAlgorithm { get { throw null; } }
         public static new System.Security.Cryptography.EDDsa Create() { throw null; }
+        public static System.Security.Cryptography.EDDsa Create(System.Security.Cryptography.EDDsaParameters parameters) { throw null; }
         //[System.Runtime.Versioning.UnsupportedOSPlatformAttribute("browser")]
         //public static new System.Security.Cryptography.RSA? Create(string algName) { throw null; }
-        // public abstract System.Security.Cryptography.RSAParameters ExportParameters(bool includePrivateParameters);
+        public abstract System.Security.Cryptography.EDDsaParameters ExportParameters(bool includePrivateParameters);
         // public virtual byte[] ExportRSAPrivateKey() { throw null; }
         // public string ExportRSAPrivateKeyPem() { throw null; }
         // public virtual byte[] ExportRSAPublicKey() { throw null; }
@@ -1398,8 +1404,8 @@ namespace System.Security.Cryptography
         // public override void ImportFromEncryptedPem(System.ReadOnlySpan<char> input, System.ReadOnlySpan<byte> passwordBytes) { }
         // public override void ImportFromEncryptedPem(System.ReadOnlySpan<char> input, System.ReadOnlySpan<char> password) { }
         // public override void ImportFromPem(System.ReadOnlySpan<char> input) { }
-        // public abstract void ImportParameters(System.Security.Cryptography.RSAParameters parameters);
-        // public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
+        public abstract void ImportParameters(System.Security.Cryptography.EDDsaParameters parameters);
+        public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
         // public virtual void ImportRSAPrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
         // public virtual void ImportRSAPublicKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
         // public override void ImportSubjectPublicKeyInfo(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
@@ -1410,7 +1416,7 @@ namespace System.Security.Cryptography
         // public override string ToXmlString(bool includePrivateParameters) { throw null; }
         // public override bool TryExportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<byte> passwordBytes, System.Security.Cryptography.PbeParameters pbeParameters, System.Span<byte> destination, out int bytesWritten) { throw null; }
         // public override bool TryExportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<char> password, System.Security.Cryptography.PbeParameters pbeParameters, System.Span<byte> destination, out int bytesWritten) { throw null; }
-        // public override bool TryExportPkcs8PrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public override bool TryExportPkcs8PrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
         // public virtual bool TryExportRSAPrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
         // public bool TryExportRSAPrivateKeyPem(System.Span<char> destination, out int charsWritten) { throw null; }
         // public virtual bool TryExportRSAPublicKey(System.Span<byte> destination, out int bytesWritten) { throw null; }

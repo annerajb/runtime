@@ -3,6 +3,7 @@
 
 using Internal.Cryptography;
 using System.Runtime.Versioning;
+using System.Formats.Asn1;
 
 namespace System.Security.Cryptography
 {
@@ -10,7 +11,7 @@ namespace System.Security.Cryptography
     {
         protected EDDsa() { }
         public static new partial EDDsa Create();
-/*
+        public static partial EDDsa Create(EDDsaParameters parameters);
         //protected  byte[] HashData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) => throw DerivedClassMustOverride();
         //protected  byte[] HashData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) => throw DerivedClassMustOverride();
         /// <summary>
@@ -20,17 +21,36 @@ namespace System.Security.Cryptography
         /// <exception cref="NotSupportedException">
         /// A derived class has not provided an implementation.
         /// </exception>
-        public virtual void ImportParameters(byte[] parameters)
+        public abstract void ImportParameters(EDDsaParameters parameters);
+        public override bool TryExportPkcs8PrivateKey(Span<byte> destination, out int bytesWritten)
         {
-            throw new NotSupportedException(SR.NotSupported_SubclassOverride);
+            AsnWriter writer = WritePkcs8();
+            return writer.TryEncode(destination, out bytesWritten);
         }
-        */
+        private unsafe AsnWriter WritePkcs8()
+        {
+            EDDsaParameters dsaParameters = ExportParameters(true);
+
+            fixed (byte* privPin = dsaParameters.Key)
+            {
+                try
+                {
+                    return EDDsaKeyFormatHelper.WritePkcs8PrivateKey(dsaParameters);
+                }
+                finally
+                {
+                    CryptographicOperations.ZeroMemory(dsaParameters.Key);
+                }
+            }
+        }
         public abstract bool VerifyHash(byte[] hash, byte[] signature);
         public virtual bool VerifyHash(ReadOnlySpan<byte> hash, ReadOnlySpan<byte> signature) => VerifyHashCore(hash, signature);
         public virtual bool TrySignHash(ReadOnlySpan<byte> hash, Span<byte> destination, out int bytesWritten)
             => TrySignHashCore(hash, destination, out bytesWritten);
+        public override string? KeyExchangeAlgorithm => null;
+        public override string SignatureAlgorithm => "EDDsa";
         /// <summary>
-        ///   Attempts to create the ECDSA signature for the specified hash value in the indicated format
+        ///   Attempts to create the EDDsa signature for the specified hash value in the indicated format
         ///   into the provided buffer.
         /// </summary>
         /// <param name="hash">The hash value to sign.</param>
@@ -77,10 +97,9 @@ namespace System.Security.Cryptography
             return VerifyHash(hash.ToArray(), signature.ToArray());
         }
         public abstract byte[] SignHash(byte[] hash);
-        /*
+
         /// <summary>
-        /// When overridden in a derived class, exports the named or explicit for an ECCurve.
-        /// If the curve has a name, the Curve property will contain named curve parameters otherwise it will contain explicit parameters.
+        /// When overridden in a derived class, exports the named or explicit for an EDDsaParameters.
         /// </summary>
         /// <param name="includePrivateParameters">
         ///   <see langword="true" /> to include private parameters, otherwise, <see langword="false" />.
@@ -89,9 +108,6 @@ namespace System.Security.Cryptography
         /// A derived class has not provided an implementation.
         /// </exception>
         /// <returns>The exported parameters.</returns>
-        public virtual byte[] ExportParameters(bool includePrivateParameters)
-        {
-            throw new NotSupportedException(SR.NotSupported_SubclassOverride);
-        }*/
+        public abstract EDDsaParameters ExportParameters(bool includePrivateParameters);
     }
 }
