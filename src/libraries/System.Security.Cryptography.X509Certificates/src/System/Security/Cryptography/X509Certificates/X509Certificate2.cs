@@ -966,6 +966,12 @@ namespace System.Security.Cryptography.X509Certificates
                             s_EcPublicKeyPrivateKeyLabels,
                             ECDsa.Create,
                             certificate.CopyWithPrivateKey),
+                    Oids.EcPublicKey when IsECDiffieHellman(certificate) =>
+                        ExtractKeyFromPem<ECDiffieHellman>(
+                            keyPem,
+                            s_EcPublicKeyPrivateKeyLabels,
+                            ECDiffieHellman.Create,
+                            certificate.CopyWithPrivateKey),
                     Oids.Ed25519 when IsEDDsa(certificate) =>
                         ExtractKeyFromPem<EDDsa>(
                             keyPem,
