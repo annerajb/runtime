@@ -578,14 +578,6 @@ namespace Internal.Cryptography.Pal
                 return new ECDsaOpenSsl(publicKeyHandle);
             }
         }
-        public EDDsa? GetEDDsaPrivateKey()
-        {
-            if (_privateKey == null || _privateKey.IsInvalid)
-            {
-                return null;
-            }
-            return new EDDsaOpenSsl(_privateKey);
-        }
         public EDDsa GetEDDsaPublicKey()
         {
             using (SafeEvpPKeyHandle publicKeyHandle = Interop.Crypto.GetX509EvpPublicKey(_cert))
@@ -623,6 +615,16 @@ namespace Internal.Cryptography.Pal
             }
 
             return new ECDiffieHellmanOpenSsl(_privateKey);
+        }
+
+        public EDDsa? GetEDDsaPrivateKey()
+        {
+            if (_privateKey == null || _privateKey.IsInvalid)
+            {
+                return null;
+            }
+
+            return new EDDsaOpenSsl(_privateKey);
         }
 
         private ICertificatePal CopyWithPrivateKey(SafeEvpPKeyHandle privateKey)

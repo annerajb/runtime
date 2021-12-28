@@ -143,10 +143,14 @@ namespace System.Security.Cryptography
             ReadOnlyMemory<byte> source,
             out int bytesRead)
         {
-            return KeyFormatHelper.ReadPkcs8(
+            ReadOnlyMemory<byte> keycurve = KeyFormatHelper.ReadPkcs8(
                 s_validOids,
                 source,
                 out bytesRead);
+            AsnValueReader reader = new AsnValueReader(keycurve.Span, AsnEncodingRules.BER);
+            //the raw key bytes are inside the octet string of the octet string
+            byte[] key = reader.ReadOctetString();
+            return key;
         }
 
 
@@ -175,7 +179,7 @@ namespace System.Security.Cryptography
 
             AsnWriter ret = WriteSubjectPublicKeyInfo(rented.AsSpan(0, written));
 
-            // Only public key data data
+            // This is public key data dowe need this?
             CryptoPool.Return(rented, clearSize: 0);
             return ret;
         }

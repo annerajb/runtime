@@ -380,7 +380,7 @@
     <Compile Include="System\Security\Cryptography\RandomNumberGeneratorImplementation.Browser.cs" />
     <Compile Include="System\Security\Cryptography\RC2Implementation.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\RSA.Create.NotSupported.cs" />
-    <!-- <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" /> -->
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\SHAHashProvider.Browser.cs" />
     <Compile Include="System\Security\Cryptography\TripleDesImplementation.NotSupported.cs" />
   </ItemGroup>
@@ -465,9 +465,9 @@
              Link="Common\System\Security\Cryptography\ECDiffieHellmanOpenSsl.Derive.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs"
              Link="Common\System\Security\Cryptography\ECDiffieHellmanOpenSslPublicKey.cs" />
-    <Compile Include="$(CommonPath)System\Security\Cryptography\ECDsaOpenSsl.cs"
-             Link="Common\System\Security\Cryptography\EDDsaOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\EDDsaOpenSsl.cs"
+             Link="Common\System\Security\Cryptography\EDDsaOpenSsl.cs" />
+    <Compile Include="$(CommonPath)System\Security\Cryptography\ECDsaOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECDsaOpenSsl.cs" />
     <Compile Include="$(CommonPath)System\Security\Cryptography\ECOpenSsl.cs"
              Link="Common\System\Security\Cryptography\ECOpenSsl.cs" />
@@ -571,6 +571,7 @@
     <Compile Include="System\Security\Cryptography\DSA.Create.Android.cs" />
     <Compile Include="System\Security\Cryptography\ECDiffieHellman.Create.Android.cs" />
     <Compile Include="System\Security\Cryptography\ECDsa.Create.Android.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\HashProviderDispenser.OpenSsl.cs" />
     <Compile Include="System\Security\Cryptography\OpenSslCipher.cs" />
     <Compile Include="System\Security\Cryptography\OpenSslCipherLite.cs" />
@@ -663,6 +664,7 @@
     <Compile Include="$(CommonPath)System\Security\Cryptography\RSASecurityTransforms.macOS.cs"
              Link="Common\System\Security\Cryptography\RSASecurityTransforms.macOS.cs" />
     <Compile Include="System\Security\Cryptography\Pbkdf2Implementation.macOS.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseAppleCrypto)' == 'true' AND '$(TargetsOSX)' != 'true'">
     <Compile Include="$(CommonPath)System\Security\Cryptography\EccSecurityTransforms.iOS.cs"
@@ -673,6 +675,7 @@
     <Compile Include="System\Security\Cryptography\AesGcm.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\ChaCha20Poly1305.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\DSA.Create.NotSupported.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
     <Compile Include="System\Security\Cryptography\Pbkdf2Implementation.Managed.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetsWindows)' == 'true'">
@@ -848,6 +851,7 @@
     <Compile Include="System\Security\Cryptography\RC2Implementation.Windows.cs" />
     <Compile Include="System\Security\Cryptography\RSACng.cs" />
     <Compile Include="System\Security\Cryptography\TripleDesImplementation.Windows.cs" />
+    <Compile Include="System\Security\Cryptography\EDDsa.Create.NotSupported.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Collections" />

@@ -297,7 +297,11 @@ namespace System.Security.Cryptography.X509Certificates
                 },
                 SubjectPublicKey = EncodedKeyValue.RawData,
             };
-
+            //this is here to make the asnwriter write a null asn tag instead of zero bytes.
+            if (EncodedParameters.RawData?.Length <= 0)
+            {
+                spki.Algorithm.Parameters = null;
+            }
             AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
             spki.Encode(writer);
             return writer;

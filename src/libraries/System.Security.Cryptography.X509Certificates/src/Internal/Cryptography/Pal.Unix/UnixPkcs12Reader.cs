@@ -602,7 +602,10 @@ namespace Internal.Cryptography.Pal
                         default:
                             return false;
                     }
-
+                    return
+                        publicKeyInfo.Algorithm.HasNullEquivalentParameters() &&
+                        AlgorithmIdentifierAsn.RepresentsNull(keyParams);
+                case Oids.Ed25519:
                     return
                         publicKeyInfo.Algorithm.HasNullEquivalentParameters() &&
                         AlgorithmIdentifierAsn.RepresentsNull(keyParams);

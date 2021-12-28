@@ -80,6 +80,11 @@ namespace Internal.Cryptography.Pal
                 return dsa.DuplicateKeyHandle();
             }
 
+            if (key is EDDsaOpenSsl eddsa)
+            {
+                return eddsa.DuplicateKeyHandle();
+            }
+
             return ((ECDiffieHellmanOpenSsl)key).DuplicateKeyHandle();
         }
 

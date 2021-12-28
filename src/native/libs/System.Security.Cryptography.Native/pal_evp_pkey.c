@@ -45,6 +45,26 @@ EVP_PKEY* CryptoNative_EvpPKeyDuplicate(EVP_PKEY* currentKey, int32_t algId)
             success = false;
         }
     }
+    else if(currentAlgId == NID_ED25519)
+    {
+        EVP_PKEY_free(newKey);
+        newKey = NULL;
+        size_t keysize = 32;
+        unsigned char rawKey[32] = {0};
+
+        if(EVP_PKEY_get_raw_private_key(currentKey, rawKey, &keysize) == SUCCESS)
+        {
+            newKey = EVP_PKEY_new_raw_private_key(currentAlgId, NULL, rawKey, keysize);
+        }else if(EVP_PKEY_get_raw_public_key(currentKey, rawKey, &keysize) == SUCCESS)
+        {
+            newKey = EVP_PKEY_new_raw_public_key(currentAlgId, NULL, rawKey, keysize);
+        }
+
+        if(newKey == NULL)
+        {
+            success = false;
+        }
+    }
     else
     {
         ERR_put_error(ERR_LIB_EVP, 0, EVP_R_UNSUPPORTED_ALGORITHM, __FILE__, __LINE__);
@@ -205,7 +225,7 @@ int32_t CryptoNative_EncodeSubjectPublicKeyInfo(EVP_PKEY* pkey, uint8_t* buf)
 
 EVP_PKEY* CryptoNative_EvpPKeyCreateRawPrivateKey(int32_t algId,const uint8_t* buf, int32_t len)
 {
-    return EVP_PKEY_new_raw_private_key(algId, NULL,buf, Int32ToSizeT(len));
+    return EVP_PKEY_new_raw_private_key(algId, NULL, buf, Int32ToSizeT(len));
 }
 
 EVP_PKEY* CryptoNative_EvpPKeyCreateRawPublicKey(int32_t algId,const uint8_t* buf, int32_t len)

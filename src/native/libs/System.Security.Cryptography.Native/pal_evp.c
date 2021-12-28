@@ -247,7 +247,7 @@ int32_t CryptoNative_EvpDigestVerify(EVP_MD_CTX* ctx, const uint8_t* signature, 
     assert(ctx != NULL);
     assert(signature != NULL);
     assert(hash != NULL);
-    assert(signature >= 64);
+    assert(signatureLen >= 64);
 
     int ret = -1;
     EVP_DigestVerify(ctx, signature, Int32ToSizeT(signatureLen), hash, Int32ToSizeT(hashLen));

@@ -237,18 +237,39 @@ internal static partial class Interop
         }
 
         [GeneratedDllImport(Libraries.CryptoNative)]
-        private static partial int CryptoNative_EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey, ref byte destination, int destinationLength);
+        private static unsafe partial int CryptoNative_EvpPKeyGetRawPrivateKey(IntPtr pkey, byte* destination, int destinationLength);
 
-        internal static int EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey, Span<byte> buf)
+        internal static ArraySegment<byte> EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey)
         {
-            int written = CryptoNative_EvpPKeyGetRawPrivateKey(pkey, ref MemoryMarshal.GetReference(buf), buf.Length);
-
-            if (written < 0)
+            bool addedRef = false;
+            //TODO is there a better way todo this?
+            try
             {
-                pkey.Dispose();
-                throw CreateOpenSslCryptographicException();
+                pkey.DangerousAddRef(ref addedRef);
+                IntPtr handle = pkey.DangerousGetHandle();
+
+                int size = 128;//GetPkcs8PrivateKeySize(handle);
+                byte[] rented = CryptoPool.Rent(size);
+                int written;
+
+                unsafe
+                {
+                    fixed (byte* buf = rented)
+                    {
+                        written = CryptoNative_EvpPKeyGetRawPrivateKey(handle, buf, size);
+                    }
+                }
+
+                Debug.Assert(written == size);
+                return new ArraySegment<byte>(rented, 0, written);
             }
-            return written;
+            finally
+            {
+                if (addedRef)
+                {
+                    pkey.DangerousRelease();
+                }
+            }
         }
 
         [GeneratedDllImport(Libraries.CryptoNative)]

@@ -100,7 +100,7 @@ namespace System.Security.Cryptography
         private const int FriendlyNameToOidCount = 112;
 
         /// <summary>Expected size of <see cref="s_oidToFriendlyName"/>.</summary>
-        private const int OidToFriendlyNameCount = 103;
+        private const int OidToFriendlyNameCount = 104;
 
         private static readonly Dictionary<string, string> s_friendlyNameToOid =
             new Dictionary<string, string>(FriendlyNameToOidCount, StringComparer.OrdinalIgnoreCase);

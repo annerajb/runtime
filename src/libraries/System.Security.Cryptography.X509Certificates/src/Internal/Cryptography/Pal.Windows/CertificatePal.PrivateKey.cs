@@ -63,7 +63,10 @@ namespace Internal.Cryptography.Pal
                 }
             );
         }
-
+        public EDDsa? GetEDDsaPrivateKey()
+        {
+            throw new PlatformNotSupportedException();
+        }
         public ECDiffieHellman? GetECDiffieHellmanPrivateKey()
         {
             return GetPrivateKey<ECDiffieHellman>(
@@ -134,7 +137,10 @@ namespace Internal.Cryptography.Pal
                 return CopyWithEphemeralKey(clonedKey.Key);
             }
         }
-
+        public ICertificatePal CopyWithPrivateKey(EDDsa privateKey)
+        {
+            throw new PlatformNotSupportedException();
+        }
         public ICertificatePal CopyWithPrivateKey(ECDiffieHellman ecdh)
         {
             ECDiffieHellmanCng? ecdhCng = ecdh as ECDiffieHellmanCng;
