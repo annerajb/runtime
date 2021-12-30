@@ -4,6 +4,7 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Formats.Asn1;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.Asn1;
 
 namespace System.Security.Cryptography
@@ -33,17 +34,19 @@ namespace System.Security.Cryptography
                 Key = key.PrivateKey.ToArray(),
             };
         }
-
+        //public is suppose to include asn and the spki asn oid structure
         internal static void ReadEDDsaPublicKey(
             ReadOnlyMemory<byte> keyData,
             in AlgorithmIdentifierAsn algId,
             out EDDsaParameters ret)
         {
-            SubjectPublicKeyInfoAsn key = SubjectPublicKeyInfoAsn.Decode(keyData, AsnEncodingRules.BER);
-
+            if (keyData.Length != 32)
+            {
+                throw new CryptographicException(SR.Cryptography_Der_Invalid_Encoding);
+            }
             ret = new EDDsaParameters
             {
-                Key = key.SubjectPublicKey.ToArray(),
+                Key = keyData.ToArray()
             };
         }
         /// <summary>
@@ -68,20 +71,13 @@ namespace System.Security.Cryptography
             ReadOnlyMemory<byte> keyData,
             out int bytesRead)
         {
-            int read;
-
-            try
+            bytesRead = 0;
+            if (keyData.Length == 32)
             {
-                AsnValueReader reader = new AsnValueReader(keyData.Span, AsnEncodingRules.DER);
-                read = reader.PeekEncodedValue().Length;
-                RSAPublicKeyAsn.Decode(keyData, AsnEncodingRules.BER);
+                bytesRead = keyData.Length;
             }
-            catch (AsnContentException e)
-            {
-                throw new CryptographicException(SR.Cryptography_Der_Invalid_Encoding, e);
-            }
-
-            bytesRead = read;
+            //eddsa are opaque values so there is no inner structure inside the key not even a sequence
+            return;
         }
 
         internal static void ReadSubjectPublicKeyInfo(
@@ -153,7 +149,56 @@ namespace System.Security.Cryptography
             return key;
         }
 
+        internal static unsafe EDDsaParameters FromEDDsaPrivateKey(ReadOnlySpan<byte> key, out int bytesRead)
+        {
+            try
+            {
+                AsnDecoder.ReadEncodedValue(
+                    key,
+                    AsnEncodingRules.BER,
+                    out _,
+                    out _,
+                    out int firstValueLength);
 
+                fixed (byte* ptr = &MemoryMarshal.GetReference(key))
+                {
+                    using (MemoryManager<byte> manager = new PointerMemoryManager<byte>(ptr, firstValueLength))
+                    {
+                        AlgorithmIdentifierAsn algId = default;
+                        FromEDDsaPrivateKey(manager.Memory, algId, out EDDsaParameters ret);
+                        bytesRead = firstValueLength;
+                        return ret;
+                    }
+                }
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException(SR.Cryptography_Der_Invalid_Encoding, e);
+            }
+        }
+        internal static void FromEDDsaPrivateKey(
+            ReadOnlyMemory<byte> keyData,
+            in AlgorithmIdentifierAsn algId,
+            out EDDsaParameters ret)
+        {
+            //asn parsing of sequence and privatekey
+            PrivateKeyInfoAsn key = PrivateKeyInfoAsn.Decode(keyData, AsnEncodingRules.BER);
+            FromEDDsaPrivateKey(key, algId, out ret);
+        }
+        internal static void FromEDDsaPrivateKey(
+            PrivateKeyInfoAsn key,
+            in AlgorithmIdentifierAsn algId,
+            out EDDsaParameters ret)
+        {
+            if (key.Version != 0)
+            {
+                throw new CryptographicException(SR.Cryptography_Der_Invalid_Encoding);
+            }
+            ret = new EDDsaParameters
+            {
+                Key = key.PrivateKey.ToArray(),
+            };
+        }
         internal static AsnWriter WriteSubjectPublicKeyInfo(ReadOnlySpan<byte> pkcs1PublicKey)
         {
             AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
@@ -220,14 +265,31 @@ namespace System.Security.Cryptography
             {
                 throw new CryptographicException(SR.Cryptography_CSP_NoPrivateKey);
             }
-            //AsnWriter algorithmIdentifier = WriteAlgorithmIdentifier(EDDsaParameters);
-            //AsnWriter ecPrivateKey = WriteEcPrivateKey(EDDsaParameters, includeDomainParameters: false);
+            AsnWriter algorithmIdentifier = WriteAlgorithmIdentifier(EDDsaParameters);
+            AsnWriter ecPrivateKey = WriteEDDsaPrivateKey(EDDsaParameters, includeDomainParameters: false);
+            //attributesWriter = attributes
+            //TODO: attributes are allowed irc but not parameters
+            return KeyFormatHelper.WritePkcs8(algorithmIdentifier, ecPrivateKey, null);
 
-            //KeyFormatHelper.WritePkcs8(algorithmIdentifier, ecPrivateKey, attributeWriter);
+            //return WritePkcs8PrivateKey(EDDsaParameters.Key);
+        }
+        private static AsnWriter WriteEDDsaPrivateKey(in EDDsaParameters ecParameters, bool includeDomainParameters)
+        {
+            AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
 
-            return WritePkcs8PrivateKey(EDDsaParameters.Key);
+            writer.WriteOctetString(ecParameters.Key);
+
+            return writer;
         }
 
+        private static AsnWriter WriteAlgorithmIdentifier(in EDDsaParameters edParameters)
+        {
+
+            AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
+            WriteAlgorithmIdentifier(writer);
+
+            return writer;
+        }
         private static void WriteAlgorithmIdentifier(AsnWriter writer)
         {
             writer.PushSequence();

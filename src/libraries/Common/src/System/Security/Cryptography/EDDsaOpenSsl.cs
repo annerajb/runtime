@@ -233,14 +233,14 @@ namespace System.Security.Cryptography
             SetKey(newKey);
             bytesRead = read;
         }
-            private void FreeKey()
+        private void FreeKey()
+        {
+            if (_key != null && _key.IsValueCreated)
             {
-                if (_key != null && _key.IsValueCreated)
-                {
-                    SafeEvpPKeyHandle handle = _key.Value;
-                    handle?.Dispose();
-                }
+                SafeEvpPKeyHandle handle = _key.Value;
+                handle?.Dispose();
             }
+        }
         [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_key))]
         private void SetKey(SafeEvpPKeyHandle newKey)
         {
@@ -250,7 +250,7 @@ namespace System.Security.Cryptography
 
             // Use ForceSet instead of the property setter to ensure that LegalKeySizes doesn't interfere
             // with the already loaded key.
-            ForceSetKeySize(128);
+            ForceSetKeySize(8 * 32);
         }
         public override int KeySize
         {
@@ -347,8 +347,7 @@ namespace System.Security.Cryptography
             // It's entirely possible that this line will cause the key to be generated in the first place.
             SafeEvpPKeyHandle key = GetKey();
 
-            ArraySegment<byte> p8 = Interop.Crypto.RentEncodePkcs8PrivateKey(key);
-
+            ArraySegment<byte> p8 = Interop.Crypto.EvpPKeyGetRawPrivateKey(key);
             try
             {
                 ReadOnlyMemory<byte> pkcs1 = VerifyPkcs8(p8);
@@ -371,40 +370,74 @@ namespace System.Security.Cryptography
             {
                 ReadOnlyMemory<byte> pkcs1Priv = EDDsaKeyFormatHelper.ReadPkcs8(pkcs8, out int read);
                 Debug.Assert(read == pkcs8.Length);
-                _ = PrivateKeyInfoAsn.Decode(pkcs1Priv, AsnEncodingRules.BER);
+                if (pkcs1Priv.Length != 32)
+                {
+                    throw new CryptographicException(SR.Cryptography_CSP_NoPrivateKey);
+                }
                 return pkcs1Priv;
             }
-            catch (CryptographicException)
+            catch (CryptographicException ex)
             {
-                throw new CryptographicException(SR.Cryptography_CSP_NoPrivateKey);
+                throw new CryptographicException(SR.Cryptography_CSP_NoPrivateKey, ex);
             }
         }
         public override EDDsaParameters ExportParameters(bool includePrivateParameters)
         {
+            SafeEvpPKeyHandle key = GetKey();
+            EDDsaParameters ret;
             if (includePrivateParameters)
             {
-                return ExportPrivateKey(
-                    static (pkcs8, pkcs1) =>
-                    {
-                        AlgorithmIdentifierAsn algId = default;
-                        EDDsaParameters ret;
-                        EDDsaKeyFormatHelper.FromPkcs1PrivateKey(pkcs1, in algId, out ret);
-                        return ret;
-                    });
-            }
-
-            return ExportPublicKey(
-                static spki =>
+                ArraySegment<byte> keyraw = Interop.Crypto.EvpPKeyGetRawPrivateKey(key);
+                ret = new(){
+                    Key = keyraw.ToArray(),
+                };
+            }else {
+                Span<byte> dest = stackalloc byte[32];
+                int publen =  Interop.Crypto.EvpPKeyGetRawPublicKey(key, dest);
+                if (publen <= 0)
                 {
-                    EDDsaParameters ret;
-                    EDDsaKeyFormatHelper.ReadSubjectPublicKeyInfo(
-                        spki.Span,
-                        out int read,
-                        out ret);
+                    throw new CryptographicException();
+                }
+                ret = new() {
+                    Key = dest.ToArray()
+                };
+            }
+            return ret;
+            // if (includePrivateParameters)
+            // {
+            //     return ExportPrivateKey(
+            //         static (pkcs8, pkcs1) =>
+            //         {
+            //             AlgorithmIdentifierAsn algId = default;
+            //             EDDsaParameters ret;
+            //             EDDsaKeyFormatHelper.FromPkcs1PrivateKey(pkcs1, in algId, out ret);
+            //             return ret;
+            //         });
+            // }
 
-                    Debug.Assert(read == spki.Length);
-                    return ret;
-                });
+            // return ExportPublicKey(
+            //     static spki =>
+            //     {
+            //         EDDsaParameters ret;
+            //         EDDsaKeyFormatHelper.ReadSubjectPublicKeyInfo(
+            //             spki.Span,
+            //             out int read,
+            //             out ret);
+
+            //         Debug.Assert(read == spki.Length);
+            //         return ret;
+            //     });
+        }
+        public override byte[] ExportSubjectPublicKeyInfo()
+        {
+            return ExportPublicKey(static spki => spki.ToArray());
+        }
+        public override bool TryExportSubjectPublicKeyInfo(Span<byte> destination, out int bytesWritten)
+        {
+            return TryExportPublicKey(
+                transform: null,
+                destination,
+                out bytesWritten);
         }
         private T ExportPublicKey<T>(Func<ReadOnlyMemory<byte>, T> exporter)
         {
@@ -416,6 +449,32 @@ namespace System.Security.Cryptography
             try
             {
                 return exporter(spki);
+            }
+            finally
+            {
+                CryptoPool.Return(spki);
+            }
+        }
+        private bool TryExportPublicKey(
+            Func<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>? transform,
+            Span<byte> destination,
+            out int bytesWritten)
+        {
+            // It's entirely possible that this line will cause the key to be generated in the first place.
+            SafeEvpPKeyHandle key = GetKey();
+
+            ArraySegment<byte> spki = Interop.Crypto.RentEncodeSubjectPublicKeyInfo(key);
+
+            try
+            {
+                ReadOnlyMemory<byte> data = spki;
+
+                if (transform != null)
+                {
+                    data = transform(data);
+                }
+
+                return data.Span.TryCopyToDestination(destination, out bytesWritten);
             }
             finally
             {
