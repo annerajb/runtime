@@ -1168,10 +1168,7 @@ namespace System.Security.Cryptography
     //         Ed25519 = 0,
     //     }
     // }
-    public partial struct EDDsaParameters
-    {
-        public byte[]? Key;
-    }
+
     public partial class RSAPKCS1KeyExchangeDeformatter : System.Security.Cryptography.AsymmetricKeyExchangeDeformatter
     {
         public RSAPKCS1KeyExchangeDeformatter() { }
