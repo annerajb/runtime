@@ -36,6 +36,13 @@ namespace System.Security.Cryptography.X509Certificates.Tests
             }
         }
 
+        private static PublicKey GetTestEDDsaKey()
+        {
+            using (var cert = new X509Certificate2(TestData.EDDsa25519Cer))
+            {
+                return cert.PublicKey;
+            }
+        }
         private static PublicKey GetTestECDHKey()
         {
             using (X509Certificate2 cert = new X509Certificate2(TestData.EcDh256Certificate))
@@ -82,6 +89,12 @@ namespace System.Security.Cryptography.X509Certificates.Tests
             Assert.Equal("1.2.840.10045.2.1", pk.Oid.Value);
         }
 
+        [Fact]
+        public static void TestOid_EDDsa()
+        {
+            PublicKey pk = GetTestEDDsaKey();
+            Assert.Equal("1.3.101.112", pk.Oid.Value);
+        }
         [Fact]
         public static void TestOid_ECDH()
         {
@@ -135,7 +148,14 @@ namespace System.Security.Cryptography.X509Certificates.Tests
 
             Assert.Throws<NotSupportedException>(() => pk.Key);
         }
-
+        private static void VerifyKey_EDDsa(EDDsa eddsa)
+        {
+            EDDsaParameters eddsaParameters = eddsadsa.ExportParameters(false);
+            byte[] expected_q = (
+                "274590F9228C1BCAB783D6A508DCEAD2DDEF8C078DDBDE6BABA21D6858F43664"
+                ).HexToByteArray();
+            Assert.Equal(expected_q, eddsaParameters.PrivateKey);
+        }
         private static void VerifyKey_DSA(DSA dsa)
         {
             DSAParameters dsaParameters = dsa.ExportParameters(false);
@@ -832,6 +852,7 @@ namespace System.Security.Cryptography.X509Certificates.Tests
             Assert.Null(key.GetRSAPublicKey());
             Assert.Null(key.GetECDsaPublicKey());
             Assert.Null(key.GetECDiffieHellmanPublicKey());
+            Assert.Null(key.GetEDDsaPublicKey());
         }
 
         [Fact]
@@ -909,6 +930,41 @@ namespace System.Security.Cryptography.X509Certificates.Tests
             Assert.ThrowsAny<CryptographicException>(() => key.GetECDsaPublicKey());
         }
 
+        [Fact]
+        [SkipOnPlatform(PlatformSupport.MobileAppleCrypto, "EDDsa is not available")]
+        public static void GetEDDsaPublicKey_Compare()
+        {
+            using (var cert = new X509Certificate2(TestData.Ed25519Cer))
+            using (EDDsa pubKey = cert.GetEDDsaPublicKey())
+            {
+                Assert.NotNull(pubKey);
+                VerifyKey_EDDsa(pubKey);
+            }
+        }
+
+        [Fact]
+        [SkipOnPlatform(PlatformSupport.MobileAppleCrypto, "EDDsa is not available")]
+        public static void GetEDDsaPublicKey_ThrowsForCorruptKey()
+        {
+            AsnEncodedData badData = new AsnEncodedData(new byte[] { 1, 2, 3, 4 });
+            PublicKey key = new PublicKey(GetTestEDDsaKey().Oid, badData, badData);
+
+            Assert.ThrowsAny<CryptographicException>(() => key.GetEDDsaPublicKey());
+        }
+        [Fact]
+        [SkipOnPlatform(PlatformSupport.MobileAppleCrypto, "DSA is not available")]
+        public static void GetEDDsaPublicKey_ReturnsEDDsaKey()
+        {
+            PublicKey key = GetTestEDDsaKey();
+
+            using (EDDsa dsa = key.GetEDDsaPublicKey())
+            {
+                Assert.NotNull(dsa);
+                byte[] certd = dsa.ExportSubjectPublicKeyInfo();
+                byte[] keyd = key.ExportSubjectPublicKeyInfo();
+                Assert.Equal(certd, keyd );
+            }
+        }
         [Fact]
         public static void GetECDiffieHellmanPublicKey_ReturnsECDHKey()
         {

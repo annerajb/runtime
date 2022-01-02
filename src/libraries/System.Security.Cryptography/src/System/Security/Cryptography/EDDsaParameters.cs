@@ -10,6 +10,8 @@ namespace System.Security.Cryptography
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct EDDsaParameters
     {
-        public byte[]? Key;
+        public System.Security.Cryptography.EDCurve Curve;
+        public byte[]? PublicKey;
+        public byte[]? PrivateKey;
     }
 }

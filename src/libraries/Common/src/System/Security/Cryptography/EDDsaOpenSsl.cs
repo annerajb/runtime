@@ -280,7 +280,7 @@ namespace System.Security.Cryptography
         public override void ImportParameters(EDDsaParameters parameters)
         {
             ThrowIfDisposed();
-            if (parameters.Key != null)
+            if (parameters.PrivateKey != null)
             {
                 AsnWriter writer = EDDsaKeyFormatHelper.WritePkcs8PrivateKey(parameters);
                 ArraySegment<byte> pkcs8 = writer.RentAndEncode();
@@ -389,7 +389,7 @@ namespace System.Security.Cryptography
             {
                 ArraySegment<byte> keyraw = Interop.Crypto.EvpPKeyGetRawPrivateKey(key);
                 ret = new(){
-                    Key = keyraw.ToArray(),
+                    PrivateKey = keyraw.ToArray(),
                 };
             }else {
                 Span<byte> dest = stackalloc byte[32];
@@ -399,7 +399,7 @@ namespace System.Security.Cryptography
                     throw new CryptographicException();
                 }
                 ret = new() {
-                    Key = dest.ToArray()
+                    PublicKey = dest.ToArray()
                 };
             }
             return ret;

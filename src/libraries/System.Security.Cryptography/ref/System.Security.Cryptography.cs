@@ -570,6 +570,41 @@ namespace System.Security.Cryptography
         public byte[]? X;
         public byte[]? Y;
     }
+    public partial struct EDCurve
+    {
+        private object _dummy;
+        private int _dummyPrimitive;
+        public System.Security.Cryptography.Oid Oid { get { throw null; } }
+        public static System.Security.Cryptography.EDCurve CreateFromFriendlyName(string oidFriendlyName) { throw null; }
+        public static System.Security.Cryptography.EDCurve CreateFromOid(System.Security.Cryptography.Oid curveOid) { throw null; }
+        public static System.Security.Cryptography.EDCurve CreateFromValue(string oidValue) { throw null; }
+    }
+    public abstract partial class EDDsa : System.Security.Cryptography.AsymmetricAlgorithm
+    {
+        protected EDDsa() { }
+        public override string? KeyExchangeAlgorithm { get { throw null; } }
+        public override string SignatureAlgorithm { get { throw null; } }
+        public static new System.Security.Cryptography.EDDsa Create() { throw null; }
+        public static System.Security.Cryptography.EDDsa Create(System.Security.Cryptography.EDDsaParameters parameters) { throw null; }
+        public abstract System.Security.Cryptography.EDDsaParameters ExportParameters(bool includePrivateParameters);
+        public override void ImportFromPem(System.ReadOnlySpan<char> input) { }
+        public abstract void ImportParameters(System.Security.Cryptography.EDDsaParameters parameters);
+        public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
+        public abstract byte[] SignHash(byte[] hash);
+        public override bool TryExportPkcs8PrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public override bool TryExportSubjectPublicKeyInfo(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public virtual bool TrySignHash(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
+        protected virtual bool TrySignHashCore(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public abstract bool VerifyHash(byte[] hash, byte[] signature);
+        public virtual bool VerifyHash(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
+        protected virtual bool VerifyHashCore(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
+    }
+    public partial struct EDDsaParameters
+    {
+        public System.Security.Cryptography.EDCurve Curve;
+        public byte[]? PrivateKey;
+        public byte[]? PublicKey;
+    }
     public partial class FromBase64Transform : System.IDisposable, System.Security.Cryptography.ICryptoTransform
     {
         public FromBase64Transform() { }
@@ -1393,43 +1428,5 @@ namespace System.Security.Cryptography
         [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCodeAttribute("The default algorithm implementations might be removed, use strong type references like 'RSA.Create()' instead.")]
         public static new System.Security.Cryptography.TripleDES? Create(string str) { throw null; }
         public static bool IsWeakKey(byte[] rgbKey) { throw null; }
-    }
-    public abstract partial class EDDsa : System.Security.Cryptography.AsymmetricAlgorithm
-    {
-        protected EDDsa() { }
-        public override string? KeyExchangeAlgorithm { get { throw null; } }
-        public override string SignatureAlgorithm { get { throw null; } }
-        public static new System.Security.Cryptography.EDDsa Create() { throw null; }
-        public static System.Security.Cryptography.EDDsa Create(System.Security.Cryptography.EDDsaParameters parameters) { throw null; }
-        //public static new System.Security.Cryptography.RSA? Create(string algName) { throw null; }
-        public abstract System.Security.Cryptography.EDDsaParameters ExportParameters(bool includePrivateParameters);
-        // protected virtual byte[] HashData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
-        // protected virtual byte[] HashData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
-        //--- public override void ImportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<byte> passwordBytes, System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
-        //----- public override void ImportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<char> password, System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
-        // public override void ImportFromEncryptedPem(System.ReadOnlySpan<char> input, System.ReadOnlySpan<byte> passwordBytes) { }
-        // public override void ImportFromEncryptedPem(System.ReadOnlySpan<char> input, System.ReadOnlySpan<char> password) { }
-        public override void ImportFromPem(System.ReadOnlySpan<char> input) { }
-        public abstract void ImportParameters(System.Security.Cryptography.EDDsaParameters parameters);
-        public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
-         public override void ImportSubjectPublicKeyInfo(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
-        // public virtual byte[] SignData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        // public byte[] SignData(byte[] data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        // public virtual byte[] SignData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        public abstract byte[] SignHash(byte[] hash);
-        // public override bool TryExportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<byte> passwordBytes, System.Security.Cryptography.PbeParameters pbeParameters, System.Span<byte> destination, out int bytesWritten) { throw null; }
-        // public override bool TryExportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<char> password, System.Security.Cryptography.PbeParameters pbeParameters, System.Span<byte> destination, out int bytesWritten) { throw null; }
-        public override bool TryExportPkcs8PrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
-        public override bool TryExportSubjectPublicKeyInfo(System.Span<byte> destination, out int bytesWritten) { throw null; }
-        // protected virtual bool TryHashData(System.ReadOnlySpan<byte> data, System.Span<byte> destination, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, out int bytesWritten) { throw null; }
-        // public virtual bool TrySignData(System.ReadOnlySpan<byte> data, System.Span<byte> destination, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding, out int bytesWritten) { throw null; }
-        protected virtual bool TrySignHashCore(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
-        public virtual bool TrySignHash(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
-        // public bool VerifyData(byte[] data, byte[] signature, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        // public bool VerifyData(System.IO.Stream data, byte[] signature, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        // public virtual bool VerifyData(System.ReadOnlySpan<byte> data, System.ReadOnlySpan<byte> signature, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding) { throw null; }
-        public abstract bool VerifyHash(byte[] hash, byte[] signature);
-        public virtual bool VerifyHash(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
-        protected virtual bool VerifyHashCore(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
     }
 }

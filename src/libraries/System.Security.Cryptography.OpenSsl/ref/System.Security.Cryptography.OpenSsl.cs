@@ -70,17 +70,22 @@ namespace System.Security.Cryptography
         public EDDsaOpenSsl(System.IntPtr handle) { }
         public EDDsaOpenSsl(System.Security.Cryptography.EDDsaParameters parameters) { }
         public EDDsaOpenSsl(System.Security.Cryptography.SafeEvpPKeyHandle pkeyHandle) { }
-        // public override int KeySize { get { throw null; } set { } }
-        // public override System.Security.Cryptography.KeySizes[] LegalKeySizes { get { throw null; } }
-        //protected override void Dispose(bool disposing) { }
+        public override int KeySize { get { throw null; } set { } }
+        public override System.Security.Cryptography.KeySizes[] LegalKeySizes { get { throw null; } }
+        protected override void Dispose(bool disposing) { }
         public System.Security.Cryptography.SafeEvpPKeyHandle DuplicateKeyHandle() { throw null; }
         public override System.Security.Cryptography.EDDsaParameters ExportParameters(bool includePrivateParameters) { throw null; }
-        // public override void GenerateKey(System.Security.Cryptography.ECCurve curve) { }
-        // protected override byte[] HashData(byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
-        // protected override byte[] HashData(System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm) { throw null; }
+        public override byte[] ExportSubjectPublicKeyInfo() { throw null; }
+        public override void ImportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<byte> passwordBytes, System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
+        public override void ImportEncryptedPkcs8PrivateKey(System.ReadOnlySpan<char> password, System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
         public override void ImportParameters(System.Security.Cryptography.EDDsaParameters parameters) { }
+        public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
+        public override void ImportSubjectPublicKeyInfo(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
         public override byte[] SignHash(byte[] hash) { throw null; }
+        public override bool TryExportSubjectPublicKeyInfo(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public override bool TrySignHash(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
         public override bool VerifyHash(byte[] hash, byte[] signature) { throw null; }
+        public override bool VerifyHash(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
     }
     public sealed class RSAOpenSsl : System.Security.Cryptography.RSA
     {

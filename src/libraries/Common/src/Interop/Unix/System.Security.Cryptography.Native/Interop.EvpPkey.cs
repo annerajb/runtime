@@ -248,10 +248,13 @@ internal static partial class Interop
                 pkey.DangerousAddRef(ref addedRef);
                 IntPtr handle = pkey.DangerousGetHandle();
 
-                int size = 128;//GetPkcs8PrivateKeySize(handle);
-                byte[] rented = CryptoPool.Rent(size);
+                int size;
+                unsafe
+                {
+                    size = CryptoNative_EvpPKeyGetRawPrivateKey(handle, null, 0);
+                }
                 int written;
-
+                byte[] rented = CryptoPool.Rent(size);
                 unsafe
                 {
                     fixed (byte* buf = rented)

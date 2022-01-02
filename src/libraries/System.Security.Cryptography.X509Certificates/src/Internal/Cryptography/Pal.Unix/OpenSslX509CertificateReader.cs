@@ -730,7 +730,7 @@ namespace Internal.Cryptography.Pal
 
             EDDsaParameters eddsaParameters = privateKey.ExportParameters(true);
 
-            using (PinAndClear.Track(eddsaParameters.Key!))
+            using (PinAndClear.Track(eddsaParameters.PrivateKey!))
             using (typedKey = new EDDsaOpenSsl(eddsaParameters))
             {
                 return CopyWithPrivateKey(typedKey.DuplicateKeyHandle());

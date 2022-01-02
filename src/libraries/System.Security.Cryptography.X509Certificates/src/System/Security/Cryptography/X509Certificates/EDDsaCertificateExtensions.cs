@@ -46,7 +46,7 @@ namespace System.Security.Cryptography.X509Certificates
                 EDDsaParameters currentParameters = publicKey.ExportParameters(false);
                 EDDsaParameters newParameters = privateKey.ExportParameters(false);
 
-                if (!currentParameters.Key.ContentsEqual(newParameters.Key))
+                if (!currentParameters.PublicKey.ContentsEqual(newParameters.PublicKey))
                 {
                     throw new ArgumentException(SR.Cryptography_PrivateKey_DoesNotMatch, nameof(privateKey));
                 }

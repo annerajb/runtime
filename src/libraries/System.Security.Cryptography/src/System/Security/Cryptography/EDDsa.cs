@@ -75,7 +75,7 @@ namespace System.Security.Cryptography
                 out int localRead,
                 out EDDsaParameters key);
 
-            fixed (byte* privPin = key.Key)
+            fixed (byte* privPin = key.PrivateKey)
             {
                 try
                 {
@@ -84,7 +84,7 @@ namespace System.Security.Cryptography
                 }
                 finally
                 {
-                    CryptographicOperations.ZeroMemory(key.Key);
+                    CryptographicOperations.ZeroMemory(key.PrivateKey);
                 }
             }
         }
@@ -107,17 +107,17 @@ namespace System.Security.Cryptography
         }
         private unsafe AsnWriter WritePkcs8()
         {
-            EDDsaParameters dsaParameters = ExportParameters(true);
+            EDDsaParameters eddsaParameters = ExportParameters(true);
 
-            fixed (byte* privPin = dsaParameters.Key)
+            fixed (byte* privPin = eddsaParameters.PrivateKey)
             {
                 try
                 {
-                    return EDDsaKeyFormatHelper.WritePkcs8PrivateKey(dsaParameters);
+                    return EDDsaKeyFormatHelper.WritePkcs8PrivateKey(eddsaParameters);
                 }
                 finally
                 {
-                    CryptographicOperations.ZeroMemory(dsaParameters.Key);
+                    CryptographicOperations.ZeroMemory(eddsaParameters.PrivateKey);
                 }
             }
         }

@@ -31,7 +31,7 @@ namespace System.Security.Cryptography
             // The modulus size determines the encoded output size of the CRT parameters.
             ret = new EDDsaParameters
             {
-                Key = key.PrivateKey.ToArray(),
+                PrivateKey = key.PrivateKey.ToArray(),
             };
         }
         //public is suppose to include asn and the spki asn oid structure
@@ -46,7 +46,7 @@ namespace System.Security.Cryptography
             }
             ret = new EDDsaParameters
             {
-                Key = keyData.ToArray()
+                PublicKey = keyData.ToArray()
             };
         }
         /// <summary>
@@ -196,7 +196,7 @@ namespace System.Security.Cryptography
             }
             ret = new EDDsaParameters
             {
-                Key = key.PrivateKey.ToArray(),
+                PrivateKey = key.PrivateKey.ToArray(),
             };
         }
         internal static AsnWriter WriteSubjectPublicKeyInfo(ReadOnlySpan<byte> pkcs1PublicKey)
@@ -261,23 +261,23 @@ namespace System.Security.Cryptography
         //
         internal static AsnWriter WritePkcs8PrivateKey(in EDDsaParameters EDDsaParameters, AttributeAsn[]? attributes = null)
         {
-            if (EDDsaParameters.Key == null)
+            if (EDDsaParameters.PrivateKey == null)
             {
                 throw new CryptographicException(SR.Cryptography_CSP_NoPrivateKey);
             }
             AsnWriter algorithmIdentifier = WriteAlgorithmIdentifier(EDDsaParameters);
-            AsnWriter ecPrivateKey = WriteEDDsaPrivateKey(EDDsaParameters, includeDomainParameters: false);
+            AsnWriter edPrivateKey = WriteEDDsaPrivateKey(EDDsaParameters, includeDomainParameters: false);
             //attributesWriter = attributes
             //TODO: attributes are allowed irc but not parameters
-            return KeyFormatHelper.WritePkcs8(algorithmIdentifier, ecPrivateKey, null);
+            return KeyFormatHelper.WritePkcs8(algorithmIdentifier, edPrivateKey, null);
 
-            //return WritePkcs8PrivateKey(EDDsaParameters.Key);
+            //return WritePkcs8PrivateKey(EDDsaParameters.PrivateKey);
         }
         private static AsnWriter WriteEDDsaPrivateKey(in EDDsaParameters ecParameters, bool includeDomainParameters)
         {
             AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
 
-            writer.WriteOctetString(ecParameters.Key);
+            writer.WriteOctetString(ecParameters.PrivateKey);
 
             return writer;
         }
@@ -301,14 +301,14 @@ namespace System.Security.Cryptography
 
         internal static AsnWriter WritePkcs1PublicKey(in EDDsaParameters EDDsaParameters)
         {
-            if (EDDsaParameters.Key == null)
+            if (EDDsaParameters.PublicKey == null)
             {
                 throw new CryptographicException(SR.Cryptography_InvalidRsaParameters);
             }
 
             AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
             writer.PushSequence();
-            writer.WriteKeyParameterInteger(EDDsaParameters.Key);
+            writer.WriteKeyParameterInteger(EDDsaParameters.PublicKey);
             writer.PopSequence();
 
             return writer;
@@ -316,12 +316,12 @@ namespace System.Security.Cryptography
 
         internal static AsnWriter WritePkcs1PrivateKey(in EDDsaParameters EDDsaParameters)
         {
-            if (EDDsaParameters.Key == null)
+            if (EDDsaParameters.PrivateKey == null)
             {
                 throw new CryptographicException(SR.Cryptography_InvalidRsaParameters);
             }
 
-            if (EDDsaParameters.Key == null)
+            if (EDDsaParameters.PrivateKey == null)
             {
                 throw new CryptographicException(SR.Cryptography_NotValidPrivateKey);
             }
@@ -332,7 +332,7 @@ namespace System.Security.Cryptography
 
             // Format version 0
             writer.WriteInteger(0);
-            writer.WriteKeyParameterInteger(EDDsaParameters.Key);
+            writer.WriteKeyParameterInteger(EDDsaParameters.PrivateKey);
 
             writer.PopSequence();
             return writer;
