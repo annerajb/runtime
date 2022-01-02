@@ -38,7 +38,7 @@ namespace System.Security.Cryptography.X509Certificates.Tests
 
         private static PublicKey GetTestEDDsaKey()
         {
-            using (var cert = new X509Certificate2(TestData.EDDsa25519Cer))
+            using (var cert = new X509Certificate2(TestData.EDDsa25519Certificate))
             {
                 return cert.PublicKey;
             }
@@ -934,7 +934,7 @@ namespace System.Security.Cryptography.X509Certificates.Tests
         [SkipOnPlatform(PlatformSupport.MobileAppleCrypto, "EDDsa is not available")]
         public static void GetEDDsaPublicKey_Compare()
         {
-            using (var cert = new X509Certificate2(TestData.Ed25519Cer))
+            using (var cert = new X509Certificate2(TestData.Ed25519Certificate))
             using (EDDsa pubKey = cert.GetEDDsaPublicKey())
             {
                 Assert.NotNull(pubKey);
