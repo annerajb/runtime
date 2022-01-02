@@ -230,6 +230,34 @@ namespace System.Security.Cryptography.X509Certificates
         }
 
         /// <summary>
+        /// Gets the <see cref="EDDsa" /> public key, or <see langword="null" /> if the key is not an ECDsa key.
+        /// </summary>
+        /// <returns>
+        /// The public key, or <see langword="null" /> if the key is not an ECDsa key.
+        /// </returns>
+        /// <exception cref="CryptographicException">
+        /// The key contents are corrupt or could not be read successfully.
+        /// </exception>
+        public EDDsa? GetEDDsaPublicKey()
+        {
+            if (_oid.Value != Oids.Ed25519)
+                return null;
+
+            EDDsa eddsa = EDDsa.Create();
+
+            try
+            {
+                eddsa.ImportSubjectPublicKeyInfo(ExportSubjectPublicKeyInfo(), out _);
+                return eddsa;
+            }
+            catch
+            {
+                eddsa.Dispose();
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="ECDiffieHellman" /> public key, or <see langword="null" />
         /// if the key is not an ECDiffieHellman key.
         /// </summary>
@@ -269,7 +297,11 @@ namespace System.Security.Cryptography.X509Certificates
                 },
                 SubjectPublicKey = EncodedKeyValue.RawData,
             };
-
+            //this is here to make the asnwriter write a null asn tag instead of zero bytes.
+            if (EncodedParameters.RawData?.Length <= 0)
+            {
+                spki.Algorithm.Parameters = null;
+            }
             AsnWriter writer = new AsnWriter(AsnEncodingRules.DER);
             spki.Encode(writer);
             return writer;

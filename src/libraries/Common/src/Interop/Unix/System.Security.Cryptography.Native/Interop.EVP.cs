@@ -13,6 +13,8 @@ internal static partial class Interop
         [GeneratedDllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_EvpMdCtxCreate")]
         internal static partial SafeEvpMdCtxHandle EvpMdCtxCreate(IntPtr type);
 
+        [GeneratedDllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_EvpMdCtxCreateDigest")]
+        internal static partial SafeEvpMdCtxHandle EvpMdCtxCreate();
         [GeneratedDllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_EvpMdCtxDestroy")]
         internal static partial void EvpMdCtxDestroy(IntPtr ctx);
 

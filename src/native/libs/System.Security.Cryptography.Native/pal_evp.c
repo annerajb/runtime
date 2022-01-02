@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #include "pal_evp.h"
+#include "pal_utilities.h"
 
 #include <assert.h>
 
@@ -56,7 +57,7 @@ int32_t CryptoNative_EvpDigestFinalEx(EVP_MD_CTX* ctx, uint8_t* md, uint32_t* s)
     return ret;
 }
 
-static EVP_MD_CTX* CryptoNative_EvpDup(const EVP_MD_CTX* ctx)
+static EVP_MD_CTX* EvpDup(const EVP_MD_CTX* ctx)
 {
     if (ctx == NULL)
     {
@@ -81,7 +82,7 @@ static EVP_MD_CTX* CryptoNative_EvpDup(const EVP_MD_CTX* ctx)
 
 int32_t CryptoNative_EvpDigestCurrent(const EVP_MD_CTX* ctx, uint8_t* md, uint32_t* s)
 {
-    EVP_MD_CTX* dup = CryptoNative_EvpDup(ctx);
+    EVP_MD_CTX* dup = EvpDup(ctx);
 
     if (dup != NULL)
     {
@@ -191,4 +192,65 @@ int32_t CryptoNative_Pbkdf2(const char* password,
 
     return PKCS5_PBKDF2_HMAC(
         password, passwordLength, salt, saltLength, iterations, digest, destinationLength, destination);
+}
+
+//awful name i should:
+// make the other one a thin wrapper
+// make another shim function for the init is calling. 
+//let caller call both or the signinit or verifyinit depending on context / use case
+
+EVP_MD_CTX* CryptoNative_EvpMdCtxCreateDigest(void)
+{
+    EVP_MD_CTX* ret = EVP_MD_CTX_new();
+    if(ret != NULL)
+    {
+        return NULL;
+    }
+    return ret;
+}
+
+bool CryptoNative_EvpDigestSignInit(EVP_MD_CTX* ctx, const EVP_MD* type, EVP_PKEY *pkey)
+{
+    assert(ctx != NULL);
+    assert(pkey != NULL);
+
+    return EVP_DigestSignInit(ctx, NULL,type, NULL, pkey);
+}
+int32_t CryptoNative_EvpDigestSign(EVP_MD_CTX* ctx, const uint8_t* source, int32_t sourceLen, uint8_t* destination, int32_t destinationLen)
+{
+    assert(ctx != NULL);
+    assert(source != NULL);
+    assert(destination != NULL);
+    assert(destinationLen >= 64);
+
+    int ret = -1;
+
+    size_t written = Int32ToSizeT(destinationLen);
+
+    if(EVP_DigestSign(ctx, destination, &written, source, Int32ToSizeT(sourceLen)) == SUCCESS)
+    {
+        ret = SizeTToInt32(written);
+    }
+
+    return ret;
+}
+
+int32_t CryptoNative_EvpDigestVerifyInit(EVP_MD_CTX* ctx, const EVP_MD* type, EVP_PKEY *pkey)
+{
+    assert(ctx != NULL);
+    assert(pkey != NULL);
+
+    return EVP_DigestVerifyInit(ctx, NULL, type, NULL, pkey);
+}
+int32_t CryptoNative_EvpDigestVerify(EVP_MD_CTX* ctx, const uint8_t* signature, int32_t signatureLen, const uint8_t* hash, int32_t hashLen)
+{
+    assert(ctx != NULL);
+    assert(signature != NULL);
+    assert(hash != NULL);
+    assert(signatureLen >= 64);
+
+    int ret = -1;
+    EVP_DigestVerify(ctx, signature, Int32ToSizeT(signatureLen), hash, Int32ToSizeT(hashLen));
+
+    return ret;
 }

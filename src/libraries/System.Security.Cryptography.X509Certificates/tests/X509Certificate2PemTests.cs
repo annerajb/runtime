@@ -28,14 +28,14 @@ MII
                 X509Certificate2.CreateFromPem(CertContents, default));
         }
 
-        [Fact]
-        public static void CreateFromPem_CryptographicException_InvalidKeyAlgorithm()
-        {
-            CryptographicException ce = Assert.Throws<CryptographicException>(() =>
-                X509Certificate2.CreateFromPem(TestData.Ed25519Certificate, default));
+        // [Fact]
+        // public static void CreateFromPem_CryptographicException_InvalidKeyAlgorithm()
+        // {
+        //     CryptographicException ce = Assert.Throws<CryptographicException>(() =>
+        //         X509Certificate2.CreateFromPem(TestData.Ed25519Certificate, default));
 
-            Assert.Contains("'1.3.101.112'", ce.Message);
-        }
+        //     Assert.Contains("'1.3.101.112'", ce.Message);
+        // }
 
         [Fact]
         public static void CreateFromPem_CryptographicException_NoKey()

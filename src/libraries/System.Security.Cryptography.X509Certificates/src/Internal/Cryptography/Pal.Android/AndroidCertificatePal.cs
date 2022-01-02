@@ -397,6 +397,15 @@ namespace Internal.Cryptography.Pal
             return new ECDiffieHellmanImplementation.ECDiffieHellmanAndroid(ecKey);
         }
 
+        public EDDsa? GetEDDsaPrivateKey()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public ICertificatePal CopyWithPrivateKey(EDDsa privateKey)
+        {
+            throw new PlatformNotSupportedException();
+        }
         public ICertificatePal CopyWithPrivateKey(DSA privateKey)
         {
             DSAImplementation.DSAAndroid? typedKey = privateKey as DSAImplementation.DSAAndroid;

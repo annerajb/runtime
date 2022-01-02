@@ -317,6 +317,10 @@ const EVP_CIPHER* EVP_chacha20_poly1305(void);
     REQUIRED_FUNCTION(EVP_DigestFinal_ex) \
     REQUIRED_FUNCTION(EVP_DigestInit_ex) \
     REQUIRED_FUNCTION(EVP_DigestUpdate) \
+    REQUIRED_FUNCTION(EVP_DigestSignInit) \
+    REQUIRED_FUNCTION(EVP_DigestSign) \
+    REQUIRED_FUNCTION(EVP_DigestVerifyInit) \
+    REQUIRED_FUNCTION(EVP_DigestVerify) \
     REQUIRED_FUNCTION(EVP_get_digestbyname) \
     REQUIRED_FUNCTION(EVP_md5) \
     REQUIRED_FUNCTION(EVP_MD_CTX_copy_ex) \
@@ -350,9 +354,13 @@ const EVP_CIPHER* EVP_chacha20_poly1305(void);
     REQUIRED_FUNCTION(EVP_PKEY_get1_DSA) \
     REQUIRED_FUNCTION(EVP_PKEY_get1_EC_KEY) \
     REQUIRED_FUNCTION(EVP_PKEY_get1_RSA) \
+    REQUIRED_FUNCTION(EVP_PKEY_get_raw_public_key) \
+    REQUIRED_FUNCTION(EVP_PKEY_get_raw_private_key) \
     REQUIRED_FUNCTION(EVP_PKEY_keygen) \
     REQUIRED_FUNCTION(EVP_PKEY_keygen_init) \
     REQUIRED_FUNCTION(EVP_PKEY_new) \
+    REQUIRED_FUNCTION(EVP_PKEY_new_raw_private_key) \
+    REQUIRED_FUNCTION(EVP_PKEY_new_raw_public_key) \
     FALLBACK_FUNCTION(EVP_PKEY_public_check) \
     REQUIRED_FUNCTION(EVP_PKEY_set1_DSA) \
     REQUIRED_FUNCTION(EVP_PKEY_set1_EC_KEY) \
@@ -772,6 +780,10 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define EVP_DigestFinal_ex EVP_DigestFinal_ex_ptr
 #define EVP_DigestInit_ex EVP_DigestInit_ex_ptr
 #define EVP_DigestUpdate EVP_DigestUpdate_ptr
+#define EVP_DigestSignInit EVP_DigestSignInit_ptr
+#define EVP_DigestSign EVP_DigestSign_ptr
+#define EVP_DigestVerifyInit EVP_DigestVerifyInit_ptr
+#define EVP_DigestVerify EVP_DigestVerify_ptr
 #define EVP_get_digestbyname EVP_get_digestbyname_ptr
 #define EVP_md5 EVP_md5_ptr
 #define EVP_MD_CTX_copy_ex EVP_MD_CTX_copy_ex_ptr
@@ -801,6 +813,8 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define EVP_PKEY_free EVP_PKEY_free_ptr
 #define EVP_PKEY_get_base_id EVP_PKEY_get_base_id_ptr
 #define EVP_PKEY_get_size EVP_PKEY_get_size_ptr
+#define EVP_PKEY_get_raw_public_key EVP_PKEY_get_raw_public_key_ptr
+#define EVP_PKEY_get_raw_private_key EVP_PKEY_get_raw_private_key_ptr
 #define EVP_PKEY_get0_RSA EVP_PKEY_get0_RSA_ptr
 #define EVP_PKEY_get1_DSA EVP_PKEY_get1_DSA_ptr
 #define EVP_PKEY_get1_EC_KEY EVP_PKEY_get1_EC_KEY_ptr
@@ -808,6 +822,8 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define EVP_PKEY_keygen EVP_PKEY_keygen_ptr
 #define EVP_PKEY_keygen_init EVP_PKEY_keygen_init_ptr
 #define EVP_PKEY_new EVP_PKEY_new_ptr
+#define EVP_PKEY_new_raw_public_key EVP_PKEY_new_raw_public_key_ptr
+#define EVP_PKEY_new_raw_private_key EVP_PKEY_new_raw_private_key_ptr
 #define EVP_PKEY_public_check EVP_PKEY_public_check_ptr
 #define EVP_PKEY_set1_DSA EVP_PKEY_set1_DSA_ptr
 #define EVP_PKEY_set1_EC_KEY EVP_PKEY_set1_EC_KEY_ptr
@@ -956,7 +972,6 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define SSL_peek SSL_peek_ptr
 #define SSL_state_string_long SSL_state_string_long_ptr
 #define SSL_read SSL_read_ptr
-#define ERR_print_errors_fp ERR_print_errors_fp_ptr
 #define SSL_renegotiate SSL_renegotiate_ptr
 #define SSL_renegotiate_pending SSL_renegotiate_pending_ptr
 #define SSL_session_reused SSL_session_reused_ptr

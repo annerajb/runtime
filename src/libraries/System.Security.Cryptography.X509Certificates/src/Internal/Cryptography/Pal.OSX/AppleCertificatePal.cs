@@ -364,6 +364,10 @@ namespace Internal.Cryptography.Pal
             return new ECDiffieHellmanImplementation.ECDiffieHellmanSecurityTransforms(publicKey, privateKey);
         }
 
+        public EDDsa? GetEDDsaPrivateKey()
+        {
+            throw new PlatformNotSupportedException();
+        }
         public string GetNameInfo(X509NameType nameType, bool forIssuer)
         {
             EnsureCertData();

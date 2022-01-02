@@ -71,7 +71,10 @@ namespace Internal.Cryptography.Pal
                 return CopyWithPrivateKey(privateSecKey);
             }
         }
-
+        public ICertificatePal CopyWithPrivateKey(EDDsa privateKey)
+        {
+            throw new PlatformNotSupportedException();
+        }
         public ICertificatePal CopyWithPrivateKey(ECDiffieHellman privateKey)
         {
             var typedKey = privateKey as ECDiffieHellmanImplementation.ECDiffieHellmanSecurityTransforms;

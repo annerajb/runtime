@@ -80,6 +80,18 @@ namespace System.Net.Security
 
                 if (_certKeyHandle == null)
                 {
+                    using (EDDsaOpenSsl? eddsa = (EDDsaOpenSsl?)cert.GetEDDsaPrivateKey())
+                    {
+                        if (eddsa != null)
+                        {
+                            _certKeyHandle = eddsa.DuplicateKeyHandle();
+                            Interop.Crypto.CheckValidOpenSslHandle(_certKeyHandle);
+                        }
+                    }
+                }
+
+                if (_certKeyHandle == null)
+                {
                     throw new NotSupportedException(SR.net_ssl_io_no_server_cert);
                 }
 
