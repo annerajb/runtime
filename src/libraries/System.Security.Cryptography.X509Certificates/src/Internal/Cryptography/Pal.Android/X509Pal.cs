@@ -28,7 +28,10 @@ namespace Internal.Cryptography.Pal
 
                 return new ECDsaImplementation.ECDsaAndroid(DecodeECPublicKey(certificatePal));
             }
-
+            public EDDsa DecodeEDDsaPublicKey(ICertificatePal? certificatePal)
+            {
+                throw new PlatformNotSupportedException();
+            }
             public ECDiffieHellman DecodeECDiffieHellmanPublicKey(ICertificatePal? certificatePal)
             {
                 if (certificatePal == null)

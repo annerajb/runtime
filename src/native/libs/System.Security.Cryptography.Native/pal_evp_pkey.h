@@ -84,3 +84,11 @@ buf must be big enough, or an out of bounds write may occur.
 Returns the number of bytes written.
 */
 PALEXPORT int32_t CryptoNative_EncodeSubjectPublicKeyInfo(EVP_PKEY* pkey, uint8_t* buf);
+
+PALEXPORT EVP_PKEY* CryptoNative_EvpPKeyCreateRawPrivateKey(int32_t algId,const uint8_t* buf, int32_t len);
+
+PALEXPORT EVP_PKEY* CryptoNative_EvpPKeyCreateRawPublicKey(int32_t algId,const uint8_t* buf, int32_t len);
+
+PALEXPORT int32_t CryptoNative_EvpPKeyGetRawPrivateKey(const EVP_PKEY* pkey, uint8_t* buf, int32_t len);
+
+PALEXPORT int32_t CryptoNative_EvpPKeyGetRawPublicKey(const EVP_PKEY* pkey, uint8_t* pub, int32_t len);

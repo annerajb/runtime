@@ -578,7 +578,15 @@ namespace Internal.Cryptography.Pal
                 return new ECDsaOpenSsl(publicKeyHandle);
             }
         }
+        public EDDsa GetEDDsaPublicKey()
+        {
+            using (SafeEvpPKeyHandle publicKeyHandle = Interop.Crypto.GetX509EvpPublicKey(_cert))
+            {
+                Interop.Crypto.CheckValidOpenSslHandle(publicKeyHandle);
 
+                return new EDDsaOpenSsl(publicKeyHandle);
+            }
+        }
         public ECDiffieHellman GetECDiffieHellmanPublicKey()
         {
             using (SafeEvpPKeyHandle publicKeyHandle = Interop.Crypto.GetX509EvpPublicKey(_cert))
@@ -607,6 +615,16 @@ namespace Internal.Cryptography.Pal
             }
 
             return new ECDiffieHellmanOpenSsl(_privateKey);
+        }
+
+        public EDDsa? GetEDDsaPrivateKey()
+        {
+            if (_privateKey == null || _privateKey.IsInvalid)
+            {
+                return null;
+            }
+
+            return new EDDsaOpenSsl(_privateKey);
         }
 
         private ICertificatePal CopyWithPrivateKey(SafeEvpPKeyHandle privateKey)
@@ -696,6 +714,24 @@ namespace Internal.Cryptography.Pal
             using (PinAndClear.Track(rsaParameters.DQ!))
             using (PinAndClear.Track(rsaParameters.InverseQ!))
             using (typedKey = new RSAOpenSsl(rsaParameters))
+            {
+                return CopyWithPrivateKey(typedKey.DuplicateKeyHandle());
+            }
+        }
+
+        public ICertificatePal CopyWithPrivateKey(EDDsa privateKey)
+        {
+            EDDsaOpenSsl? typedKey = privateKey as EDDsaOpenSsl;
+
+            if (typedKey != null)
+            {
+                return CopyWithPrivateKey(typedKey.DuplicateKeyHandle());
+            }
+
+            EDDsaParameters eddsaParameters = privateKey.ExportParameters(true);
+
+            using (PinAndClear.Track(eddsaParameters.PrivateKey!))
+            using (typedKey = new EDDsaOpenSsl(eddsaParameters))
             {
                 return CopyWithPrivateKey(typedKey.DuplicateKeyHandle());
             }

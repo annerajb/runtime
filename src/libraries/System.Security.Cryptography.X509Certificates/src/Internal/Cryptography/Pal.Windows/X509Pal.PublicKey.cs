@@ -36,7 +36,10 @@ namespace Internal.Cryptography.Pal
 
             throw new NotSupportedException(SR.NotSupported_KeyAlgorithm);
         }
-
+        public EDDsa DecodeEDDsaPublicKey(ICertificatePal? certificatePal)
+        {
+            throw new PlatformNotSupportedException();
+        }
         public ECDiffieHellman DecodeECDiffieHellmanPublicKey(ICertificatePal? certificatePal)
         {
             if (certificatePal is CertificatePal pal)

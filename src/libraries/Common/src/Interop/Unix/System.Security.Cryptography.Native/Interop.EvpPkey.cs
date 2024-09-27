@@ -206,12 +206,97 @@ internal static partial class Interop
             }
         }
 
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial SafeEvpPKeyHandle CryptoNative_EvpPKeyCreateRawPrivateKey(EvpAlgorithmId algId, ref byte buf, int len);
+
+        internal static SafeEvpPKeyHandle EvpPKeyCreateRawPrivateKey(EvpAlgorithmId algId, ReadOnlySpan<byte> buf)
+        {
+            SafeEvpPKeyHandle pkey = CryptoNative_EvpPKeyCreateRawPrivateKey(algId, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (pkey.IsInvalid)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return pkey;
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial SafeEvpPKeyHandle CryptoNative_EvpPKeyCreateRawPublicKey(EvpAlgorithmId algId, ref byte buf, int len);
+
+        internal static SafeEvpPKeyHandle EvpPKeyCreateRawPublicKey(EvpAlgorithmId algId, ReadOnlySpan<byte> buf)
+        {
+            SafeEvpPKeyHandle pkey = CryptoNative_EvpPKeyCreateRawPublicKey(algId, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (pkey.IsInvalid)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return pkey;
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static unsafe partial int CryptoNative_EvpPKeyGetRawPrivateKey(IntPtr pkey, byte* destination, int destinationLength);
+
+        internal static ArraySegment<byte> EvpPKeyGetRawPrivateKey(SafeEvpPKeyHandle pkey)
+        {
+            bool addedRef = false;
+            //TODO is there a better way todo this?
+            try
+            {
+                pkey.DangerousAddRef(ref addedRef);
+                IntPtr handle = pkey.DangerousGetHandle();
+
+                int size;
+                unsafe
+                {
+                    size = CryptoNative_EvpPKeyGetRawPrivateKey(handle, null, 0);
+                }
+                int written;
+                byte[] rented = CryptoPool.Rent(size);
+                unsafe
+                {
+                    fixed (byte* buf = rented)
+                    {
+                        written = CryptoNative_EvpPKeyGetRawPrivateKey(handle, buf, size);
+                    }
+                }
+
+                Debug.Assert(written == size);
+                return new ArraySegment<byte>(rented, 0, written);
+            }
+            finally
+            {
+                if (addedRef)
+                {
+                    pkey.DangerousRelease();
+                }
+            }
+        }
+
+        [GeneratedDllImport(Libraries.CryptoNative)]
+        private static partial int CryptoNative_EvpPKeyGetRawPublicKey(SafeEvpPKeyHandle pkey, ref byte destination, int destinationLength);
+
+        internal static int EvpPKeyGetRawPublicKey(SafeEvpPKeyHandle pkey, Span<byte> buf)
+        {
+            int written = CryptoNative_EvpPKeyGetRawPublicKey(pkey, ref MemoryMarshal.GetReference(buf), buf.Length);
+
+            if (written < 0)
+            {
+                pkey.Dispose();
+                throw CreateOpenSslCryptographicException();
+            }
+            return written;
+        }
+
         internal enum EvpAlgorithmId
         {
             Unknown = 0,
             RSA = 6,
             DSA = 116,
             ECC = 408,
+            Ed25519 = 1087,
         }
     }
 }

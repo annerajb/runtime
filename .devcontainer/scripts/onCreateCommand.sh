@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-
+git config --global core.autocrlf false
 # prebuild the repo, so it is ready for development
 ./build.sh libs+clr -rc Release
 # restore libs tests so that the project is ready to be loaded by OmniSharp

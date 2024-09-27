@@ -8,6 +8,7 @@ namespace System.Security.Cryptography
 {
     internal static partial class Oids
     {
+        private static volatile Oid? _ed25519Oid;
         private static volatile Oid? _rsaOid;
         private static volatile Oid? _ecPublicKeyOid;
         private static volatile Oid? _tripleDesCbcOid;
@@ -30,6 +31,7 @@ namespace System.Security.Cryptography
         private static volatile Oid? _subjectKeyIdentifierOid;
 
         internal static Oid RsaOid => _rsaOid ??= InitializeOid(Rsa);
+        internal static Oid Ed25519Oid => _ed25519Oid ??= InitializeOid(Ed25519);
         internal static Oid EcPublicKeyOid => _ecPublicKeyOid ??= InitializeOid(EcPublicKey);
         internal static Oid TripleDesCbcOid => _tripleDesCbcOid ??= InitializeOid(TripleDesCbc);
         internal static Oid Aes256CbcOid => _aes256CbcOid ??= InitializeOid(Aes256Cbc);

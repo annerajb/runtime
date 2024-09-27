@@ -97,10 +97,10 @@ namespace System.Security.Cryptography
         }
 
         /// <summary>Expected size of <see cref="s_friendlyNameToOid"/>.</summary>
-        private const int FriendlyNameToOidCount = 111;
+        private const int FriendlyNameToOidCount = 112;
 
         /// <summary>Expected size of <see cref="s_oidToFriendlyName"/>.</summary>
-        private const int OidToFriendlyNameCount = 103;
+        private const int OidToFriendlyNameCount = 104;
 
         private static readonly Dictionary<string, string> s_friendlyNameToOid =
             new Dictionary<string, string>(FriendlyNameToOidCount, StringComparer.OrdinalIgnoreCase);
@@ -271,6 +271,7 @@ namespace System.Security.Cryptography
             AddEntry("1.2.840.10045.3.1.4", "x962P239v1");
             AddEntry("1.2.840.10045.3.1.5", "x962P239v2");
             AddEntry("1.2.840.10045.3.1.6", "x962P239v3");
+            AddEntry("1.3.101.112", "Ed25519");
         }
 
         static partial void ExtraStaticDebugValidation();

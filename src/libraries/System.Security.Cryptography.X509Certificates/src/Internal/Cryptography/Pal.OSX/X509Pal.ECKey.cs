@@ -21,7 +21,10 @@ namespace Internal.Cryptography.Pal
             {
                 return new ECDsaImplementation.ECDsaSecurityTransforms(DecodeECPublicKey(certificatePal));
             }
-
+            public EDDsa DecodeEDDsaPublicKey(ICertificatePal? certificatePal)
+            {
+                throw new PlatformNotSupportedException();
+            }
             public ECDiffieHellman DecodeECDiffieHellmanPublicKey(ICertificatePal? certificatePal)
             {
                 return new ECDiffieHellmanImplementation.ECDiffieHellmanSecurityTransforms(DecodeECPublicKey(certificatePal));

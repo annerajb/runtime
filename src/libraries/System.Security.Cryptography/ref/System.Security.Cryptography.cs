@@ -570,6 +570,41 @@ namespace System.Security.Cryptography
         public byte[]? X;
         public byte[]? Y;
     }
+    public partial struct EDCurve
+    {
+        private object _dummy;
+        private int _dummyPrimitive;
+        public System.Security.Cryptography.Oid Oid { get { throw null; } }
+        public static System.Security.Cryptography.EDCurve CreateFromFriendlyName(string oidFriendlyName) { throw null; }
+        public static System.Security.Cryptography.EDCurve CreateFromOid(System.Security.Cryptography.Oid curveOid) { throw null; }
+        public static System.Security.Cryptography.EDCurve CreateFromValue(string oidValue) { throw null; }
+    }
+    public abstract partial class EDDsa : System.Security.Cryptography.AsymmetricAlgorithm
+    {
+        protected EDDsa() { }
+        public override string? KeyExchangeAlgorithm { get { throw null; } }
+        public override string SignatureAlgorithm { get { throw null; } }
+        public static new System.Security.Cryptography.EDDsa Create() { throw null; }
+        public static System.Security.Cryptography.EDDsa Create(System.Security.Cryptography.EDDsaParameters parameters) { throw null; }
+        public abstract System.Security.Cryptography.EDDsaParameters ExportParameters(bool includePrivateParameters);
+        public override void ImportFromPem(System.ReadOnlySpan<char> input) { }
+        public abstract void ImportParameters(System.Security.Cryptography.EDDsaParameters parameters);
+        public override void ImportPkcs8PrivateKey(System.ReadOnlySpan<byte> source, out int bytesRead) { throw null; }
+        public abstract byte[] SignHash(byte[] hash);
+        public override bool TryExportPkcs8PrivateKey(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public override bool TryExportSubjectPublicKeyInfo(System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public virtual bool TrySignHash(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
+        protected virtual bool TrySignHashCore(System.ReadOnlySpan<byte> hash, System.Span<byte> destination, out int bytesWritten) { throw null; }
+        public abstract bool VerifyHash(byte[] hash, byte[] signature);
+        public virtual bool VerifyHash(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
+        protected virtual bool VerifyHashCore(System.ReadOnlySpan<byte> hash, System.ReadOnlySpan<byte> signature) { throw null; }
+    }
+    public partial struct EDDsaParameters
+    {
+        public System.Security.Cryptography.EDCurve Curve;
+        public byte[]? PrivateKey;
+        public byte[]? PublicKey;
+    }
     public partial class FromBase64Transform : System.IDisposable, System.Security.Cryptography.ICryptoTransform
     {
         public FromBase64Transform() { }
@@ -1121,6 +1156,19 @@ namespace System.Security.Cryptography
         public byte[]? P;
         public byte[]? Q;
     }
+    // public partial struct EDCurve
+    // {
+    //     public System.Security.Cryptography.ECCurve.EDCurveType CurveType;
+    //     public System.Security.Cryptography.Oid Oid { get { throw null; } }
+    //     public static System.Security.Cryptography.ECCurve CreateFromFriendlyName(string oidFriendlyName) { throw null; }
+    //     public static System.Security.Cryptography.ECCurve CreateFromOid(System.Security.Cryptography.Oid curveOid) { throw null; }
+    //     public static System.Security.Cryptography.ECCurve CreateFromValue(string oidValue) { throw null; }
+    //     public enum EDCurveType
+    //     {
+    //         Ed25519 = 0,
+    //     }
+    // }
+
     public partial class RSAPKCS1KeyExchangeDeformatter : System.Security.Cryptography.AsymmetricKeyExchangeDeformatter
     {
         public RSAPKCS1KeyExchangeDeformatter() { }

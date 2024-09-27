@@ -31,6 +31,11 @@ namespace Internal.Cryptography.Pal
             return ImportPkcs12(new UnixPkcs12Reader.CertAndKey { Cert = this, Key = privateKey });
         }
 
+        public ICertificatePal CopyWithPrivateKey(EDDsa privateKey)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public ICertificatePal CopyWithPrivateKey(RSA privateKey)
         {
             return ImportPkcs12(new UnixPkcs12Reader.CertAndKey { Cert = this, Key = privateKey });

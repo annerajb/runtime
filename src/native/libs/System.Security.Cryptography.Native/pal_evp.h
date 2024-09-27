@@ -143,3 +143,13 @@ PALEXPORT int32_t CryptoNative_Pbkdf2(const char* password,
                                       const EVP_MD* digest,
                                       unsigned char* destination,
                                       int32_t destinationLength);
+
+PALEXPORT EVP_MD_CTX* CryptoNative_EvpMdCtxCreateDigest(void);
+
+PALEXPORT bool CryptoNative_EvpDigestSignInit(EVP_MD_CTX* ctx, const EVP_MD* type, EVP_PKEY *pkey);
+
+PALEXPORT int32_t CryptoNative_EvpDigestSign(EVP_MD_CTX* ctx, const uint8_t* source, int32_t sourceLen, uint8_t* destination, int32_t destinationLen);
+
+PALEXPORT int32_t CryptoNative_EvpDigestVerifyInit(EVP_MD_CTX* ctx, const EVP_MD* type, EVP_PKEY *pkey);
+
+PALEXPORT int32_t CryptoNative_EvpDigestVerify(EVP_MD_CTX* ctx, const uint8_t* signature, int32_t signatureLen, const uint8_t* hash, int32_t hashLen);
